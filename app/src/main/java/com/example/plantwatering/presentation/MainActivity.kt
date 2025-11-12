@@ -23,8 +23,6 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,7 +78,9 @@ fun AttendEntry(id: String, name: String, modifier: Modifier = Modifier) {
                 text = id
             )
             Text(
-                text = name
+                text = name,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
 
             )
         }
