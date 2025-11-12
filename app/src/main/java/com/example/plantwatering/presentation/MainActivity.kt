@@ -22,8 +22,6 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,9 +29,6 @@ import androidx.compose.ui.unit.sp
 import com.example.plantwatering.ui.theme.PlantWateringTheme
 import com.example.plantwatering.R
 
-val myFont = FontFamily(
-    Font(R.font.gowunbatang_regular)
-)
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +40,7 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         TopAppBar(
                             title = {
-                                Text("Top App Bar", fontFamily = myFont,)
+                                Text("Top App Bar")
                             },
                             colors = topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -55,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     },
                     bottomBar = {
                         BottomAppBar{
-                            Text("Bottom App Bar", fontFamily = myFont,)
+                            Text("Bottom App Bar")
                         }
                     }
                 ) { innerPadding ->
@@ -84,12 +79,10 @@ fun AttendEntry(id: String, name: String, modifier: Modifier = Modifier) {
         Spacer(Modifier.width(7.dp))
         Column{
             Text(
-                text = id,
-                fontFamily = myFont
+                text = id
             )
             Text(
                 text = name,
-                fontFamily = myFont,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
 
