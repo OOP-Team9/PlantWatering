@@ -1,4 +1,4 @@
-package com.example.plantwatering
+package com.example.plantwatering.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
