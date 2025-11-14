@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import com.example.plantwatering.ui.theme.PlantWateringTheme
 import com.example.plantwatering.R
 
-//pr test
 val myFont = FontFamily(
     Font(R.font.gowunbatang_regular)
 )
