@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,15 +34,16 @@ import com.example.plantwatering.ui.theme.PlantWateringTheme
 import com.example.plantwatering.R
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Grass
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.Alarm
 
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.Grass
 import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material.icons.outlined.Alarm
+
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.NavigationBar
@@ -69,13 +71,13 @@ class MainActivity : ComponentActivity() {
                 val items = listOf(
                     BottomNavigationItem(
                         title = "Home",
-                        selectedIcon = Icons.Filled.Home,
-                        unselectedIcon = Icons.Outlined.Home,
+                        selectedIcon = Icons.Filled.Grass,
+                        unselectedIcon = Icons.Outlined.Grass,
                     ),
                     BottomNavigationItem(
                         title = "Tip",
-                        selectedIcon = Icons.Filled.Email,
-                        unselectedIcon = Icons.Outlined.Email,
+                        selectedIcon = Icons.Filled.List,
+                        unselectedIcon = Icons.Outlined.List,
                     ),
                     BottomNavigationItem(
                         title = "Water",
