@@ -6,6 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +52,10 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.plantwatering.ui.theme.BoxGreen
 
 
 // data 쪽으로 옮겨야 하나
@@ -101,7 +107,23 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         //modifier = Modifier.fillMaxSize(),
                         bottomBar = { //NavigationBar 배치
-                            NavigationBar {
+                            Box(
+                                modifier = Modifier
+                                    .graphicsLayer{
+                                        translationY = 31.dp.toPx()
+                                        shape = RoundedCornerShape(
+                                            topStart = 45.dp,
+                                            topEnd = 45.dp,
+                                            bottomStart = 45.dp,
+                                            bottomEnd = 45.dp,
+                                        )
+                                        clip = true
+                                    }
+                                    .size( width=297.dp, height = 69.dp)
+                                    .shadow(2.dp)
+                                    .background(BoxGreen)
+                            )
+                            NavigationBar{
                                 items.forEachIndexed { index, item ->
                                     NavigationBarItem(
                                         selected = selectedItemIndex == index,
