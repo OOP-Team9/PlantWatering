@@ -1,29 +1,24 @@
 package com.example.plantwatering.presentation
 
 import android.annotation.SuppressLint
+import android.graphics.BlurMaskFilter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,13 +27,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.ui.theme.PlantWateringTheme
-import com.example.plantwatering.R
+
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.List
@@ -53,24 +46,30 @@ import androidx.compose.material.icons.outlined.Alarm
 
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.plantwatering.ui.theme.AlarmOffGray
 import com.example.plantwatering.ui.theme.BackGroundGreen
 import com.example.plantwatering.ui.theme.BoxGreen
+import com.example.plantwatering.ui.theme.ButtonGreen
+import com.example.plantwatering.ui.theme.White
 
-
-// data 쪽으로 옮겨야 하나
 data class BottomNavigationItem(
     val title : String,
     val selectedIcon: ImageVector,
@@ -186,74 +185,74 @@ fun AppNavigation(){
         color = BackGroundGreen
     ) {
         Scaffold(
-            bottomBar = { //NavigationBar 배치
-                //위로 올려야함, 가로세로 조정 필요
+            bottomBar = {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth() ,
+                        .fillMaxWidth(),
                     contentAlignment = Alignment.Center
-                ){
-                    NavigationBar(
-                    modifier = Modifier
-                        .padding(bottom = 61.dp)
-                        .height(69.dp)
-                        .width(297.dp)
-                        .shadow(8.dp, RoundedCornerShape(40.dp))
-                        .graphicsLayer {
-                            shape = RoundedCornerShape(45.dp)
-                            clip = true
-                        },
-                    containerColor = BoxGreen,
-                ){
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        items.forEachIndexed { index, item ->
-                        val selected = selectedItemIndex == index
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(bottom = 61.dp)
+                            .height(69.dp)
+                            .width(297.dp)
+                            .dropShadow(RoundedCornerShape(45.dp))
+                            .background(White, RoundedCornerShape(45.dp)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(
+                                0.dp,
+                                Alignment.CenterHorizontally
+                            ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            items.forEachIndexed { index, item ->
 
-                        NavigationBarItem(
-                            selected = (selectedItemIndex == index),
-                            onClick = {
-                                selectedItemIndex = index
-                                navController.navigate(item.route){
-                                    popUpTo(0){
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            icon = {
-                                BadgedBox(
+                                val isSelected = selectedItemIndex == index
+
+                                Box(
                                     modifier = Modifier
-                                        //.padding(-40.dp)
+                                        .width(71.dp)
+                                        .height(58.dp)
                                         .background(
-                                            color = if (selected) BoxGreen else Color.Transparent,
-                                            shape = CircleShape
-                                        ),
-                                    badge = {
-                                        if (item.badgeCount != null) {
-                                            Badge {
-                                                Text(text = item.badgeCount.toString())
+                                            color = if (isSelected) BoxGreen else Color.Transparent,
+                                            shape = RoundedCornerShape(45.dp)
+                                        )
+                                        .clickable {
+                                            selectedItemIndex = index
+                                            navController.navigate(item.route) {
+                                                popUpTo(0) { inclusive = true }
+                                                launchSingleTop = true
+                                                restoreState = true
+                                            }
+                                        },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    BadgedBox(
+                                        badge = {
+                                            if (item.badgeCount != null) {
+                                                Badge {
+                                                    Text(text = item.badgeCount.toString())
+                                                }
                                             }
                                         }
+                                    ) {
+                                        Icon(
+                                            imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
+                                            contentDescription = item.title,
+                                            tint = if (isSelected) ButtonGreen else AlarmOffGray
+                                        )
                                     }
-                                ) {
-                                    Icon(
-                                        imageVector = if (index == selectedItemIndex) {
-                                            item.selectedIcon
-                                        } else item.unselectedIcon,
-                                        contentDescription = item.title
-                                    )
                                 }
                             }
-                        )
+                        }
                     }
-                    }}
                 }
             }
+
         ){paddingValues ->
             NavHost(
                 navController = navController,
@@ -277,28 +276,47 @@ fun AppNavigation(){
     }
 }
 
-//-------//
+//그림자 확장 함수
 @Composable
-fun AttendEntry(id: String, name: String, modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier.padding(5.dp)
-    ){
-        Image(
-            painter = painterResource(R.drawable.girl),
-            contentDescription = "Girl icon",
-            modifier = Modifier.size(50.dp)
-        )
-        Spacer(Modifier.width(7.dp))
-        Column{
-            Text(
-                text = id
-            )
-            Text(
-                text = name,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+fun Modifier.dropShadow(
+    shape: Shape,
+    color: Color = Color.Black.copy(0.25f),
+    blur: Dp = 7.dp,
+    offsetY: Dp = 0.dp,
+    offsetX: Dp = 0.dp,
+    spread: Dp = 0.dp
+) = composed {
+    val density = LocalDensity.current
 
-            )
+    val paint = remember(color, blur) {
+        Paint().apply {
+            this.color = color
+            val blurPx = with(density) { blur.toPx() }
+            if (blurPx > 0f) {
+                this.asFrameworkPaint().maskFilter =
+                    BlurMaskFilter(blurPx, BlurMaskFilter.Blur.NORMAL)
+            }
+        }
+    }
+
+    drawBehind {
+        val spreadPx = spread.toPx()
+        val offsetXPx = offsetX.toPx()
+        val offsetYPx = offsetY.toPx()
+
+        val shadowWidth = size.width + spreadPx
+        val shadowHeight = size.height + spreadPx
+
+        if (shadowWidth <= 0f || shadowHeight <= 0f) return@drawBehind
+
+        val shadowSize = Size(shadowWidth, shadowHeight)
+        val shadowOutline = shape.createOutline(shadowSize, layoutDirection, this)
+
+        drawIntoCanvas { canvas ->
+            canvas.save()
+            canvas.translate(offsetXPx, offsetYPx)
+            canvas.drawOutline(shadowOutline, paint)
+            canvas.restore()
         }
     }
 }
@@ -306,7 +324,7 @@ fun AttendEntry(id: String, name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    PlantWateringTheme {
-        AttendEntry(id = "2024125052", name="성춘향")
-    }
+//    PlantWateringTheme {
+//        AttendEntry(id = "2024125052", name="성춘향")
+//    }
 }
