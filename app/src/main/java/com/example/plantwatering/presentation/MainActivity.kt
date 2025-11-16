@@ -7,15 +7,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -52,9 +56,17 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.plantwatering.ui.theme.BackGroundGreen
 import com.example.plantwatering.ui.theme.BoxGreen
 
 
@@ -64,108 +76,208 @@ data class BottomNavigationItem(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     // 급수 해야 할 식물 표시 기능 추가
-    var badgeCount: Int? = null
+    var badgeCount: Int? = null,
+    val route: String
 )
+
+enum class Screens {
+    HomeScreen,
+    TipScreen,
+    WateringScreen,
+    AlarmScreen
+}
+
+val items = listOf(
+    BottomNavigationItem(
+        title = "Home",
+        selectedIcon = Icons.Filled.Grass,
+        unselectedIcon = Icons.Outlined.Grass,
+        route = Screens.HomeScreen.name
+    ),
+    BottomNavigationItem(
+        title = "Tip",
+        selectedIcon = Icons.Filled.List,
+        unselectedIcon = Icons.Outlined.List,
+        route = Screens.TipScreen.name
+    ),
+    BottomNavigationItem(
+        title = "Water",
+        selectedIcon = Icons.Filled.WaterDrop,
+        unselectedIcon = Icons.Outlined.WaterDrop,
+        badgeCount = 3,
+        route = Screens.WateringScreen.name
+    ),
+    BottomNavigationItem(
+        title = "Alarm",
+        selectedIcon = Icons.Filled.Alarm,
+        unselectedIcon = Icons.Outlined.Alarm,
+        route = Screens.AlarmScreen.name
+    ),
+)
+
+
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent { //컴포저블 함수 : UI를 선언하기 위해 사용하는 함수
+        setContent {
             PlantWateringTheme {
-                val items = listOf(
-                    BottomNavigationItem(
-                        title = "Home",
-                        selectedIcon = Icons.Filled.Grass,
-                        unselectedIcon = Icons.Outlined.Grass,
-                    ),
-                    BottomNavigationItem(
-                        title = "Tip",
-                        selectedIcon = Icons.Filled.List,
-                        unselectedIcon = Icons.Outlined.List,
-                    ),
-                    BottomNavigationItem(
-                        title = "Water",
-                        selectedIcon = Icons.Filled.WaterDrop,
-                        unselectedIcon = Icons.Outlined.WaterDrop,
-                        badgeCount = 3,
-                    ),
-                    BottomNavigationItem(
-                        title = "Alarm",
-                        selectedIcon = Icons.Filled.Alarm,
-                        unselectedIcon = Icons.Outlined.Alarm,
-                    ),
-                )
-                var selectedItemIndex by rememberSaveable {
-                    mutableStateOf(0)
-                }
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Scaffold(
-                        //modifier = Modifier.fillMaxSize(),
-                        bottomBar = { //NavigationBar 배치
-                            Box(
-                                modifier = Modifier
-                                    .graphicsLayer{
-                                        translationY = 31.dp.toPx()
-                                        shape = RoundedCornerShape(
-                                            topStart = 45.dp,
-                                            topEnd = 45.dp,
-                                            bottomStart = 45.dp,
-                                            bottomEnd = 45.dp,
-                                        )
-                                        clip = true
+                AppNavigation()
+            }
+        }
+    }
+}
+
+@Composable
+fun HomeScreen(){
+    Box(modifier = Modifier
+        .fillMaxSize(),
+        contentAlignment = Alignment.Center){
+        Text(text = "HomeScreen",
+            fontSize = 22.sp)
+    }
+}
+
+@Composable
+fun TipScreen(){
+    Box(modifier = Modifier
+        .fillMaxSize(),
+        contentAlignment = Alignment.Center){
+        Text(text = "TipScreen",
+            fontSize = 22.sp)
+    }
+}
+
+@Composable
+fun WateringScreen(){
+    Box(modifier = Modifier
+        .fillMaxSize(),
+        contentAlignment = Alignment.Center){
+        Text(text = "WateringScreen",
+            fontSize = 22.sp)
+    }
+}
+
+@Composable
+fun AlarmScreen(){
+    Box(modifier = Modifier
+        .fillMaxSize(),
+        contentAlignment = Alignment.Center){
+        Text(text = "AlarmScreen",
+            fontSize = 22.sp)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppNavigation(){
+    val navController : NavHostController = rememberNavController()
+
+    var selectedItemIndex by rememberSaveable {
+        mutableStateOf(0)
+    }
+
+    var selected = true
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = BackGroundGreen
+    ) {
+        Scaffold(
+            bottomBar = { //NavigationBar 배치
+                //위로 올려야함, 가로세로 조정 필요
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth() ,
+                    contentAlignment = Alignment.Center
+                ){
+                    NavigationBar(
+                    modifier = Modifier
+                        .padding(bottom = 61.dp)
+                        .height(69.dp)
+                        .width(297.dp)
+                        .shadow(8.dp, RoundedCornerShape(40.dp))
+                        .graphicsLayer {
+                            shape = RoundedCornerShape(45.dp)
+                            clip = true
+                        },
+                    containerColor = BoxGreen,
+                ){
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        items.forEachIndexed { index, item ->
+                        val selected = selectedItemIndex == index
+
+                        NavigationBarItem(
+                            selected = (selectedItemIndex == index),
+                            onClick = {
+                                selectedItemIndex = index
+                                navController.navigate(item.route){
+                                    popUpTo(0){
+                                        inclusive = true
                                     }
-                                    .size( width=297.dp, height = 69.dp)
-                                    .shadow(2.dp)
-                                    .background(BoxGreen)
-                            )
-                            NavigationBar{
-                                items.forEachIndexed { index, item ->
-                                    NavigationBarItem(
-                                        selected = selectedItemIndex == index,
-                                        onClick = {
-                                            selectedItemIndex = index
-                                            //navController.navigate(item.title)
-                                        },
-                                        label = {
-                                            Text(text = item.title)
-                                        },
-                                        //alwaysShowLabel = false,
-                                        icon = {
-                                            BadgedBox(
-                                                badge = {
-                                                    if (item.badgeCount != null) {
-                                                        Badge {
-                                                            Text(text = item.badgeCount.toString())
-                                                        }
-                                                    }
-                                                }
-                                            ) {
-                                                Icon(
-                                                    imageVector = if (index == selectedItemIndex) {
-                                                        item.selectedIcon
-                                                    } else item.unselectedIcon,
-                                                    contentDescription = item.title
-                                                )
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
+                            icon = {
+                                BadgedBox(
+                                    modifier = Modifier
+                                        //.padding(-40.dp)
+                                        .background(
+                                            color = if (selected) BoxGreen else Color.Transparent,
+                                            shape = CircleShape
+                                        ),
+                                    badge = {
+                                        if (item.badgeCount != null) {
+                                            Badge {
+                                                Text(text = item.badgeCount.toString())
                                             }
                                         }
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = if (index == selectedItemIndex) {
+                                            item.selectedIcon
+                                        } else item.unselectedIcon,
+                                        contentDescription = item.title
                                     )
                                 }
                             }
-                        }
-                    ) {
-
+                        )
                     }
+                    }}
+                }
+            }
+        ){paddingValues ->
+            NavHost(
+                navController = navController,
+                startDestination = Screens.HomeScreen.name,
+                modifier = Modifier.padding(paddingValues)
+            ){
+                composable(route = Screens.HomeScreen.name){
+                    HomeScreen()
+                }
+                composable(route = Screens.TipScreen.name){
+                    TipScreen()
+                }
+                composable(route = Screens.WateringScreen.name){
+                    WateringScreen()
+                }
+                composable(route = Screens.AlarmScreen.name){
+                    AlarmScreen()
                 }
             }
         }
     }
 }
 
+//-------//
 @Composable
 fun AttendEntry(id: String, name: String, modifier: Modifier = Modifier) {
     Row(
