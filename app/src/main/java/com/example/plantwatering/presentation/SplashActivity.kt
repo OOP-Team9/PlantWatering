@@ -28,5 +28,7 @@ class SplashActivity: AppCompatActivity() {
     private fun initViews(){
         val mainIntent = Intent(this, MainActivity::class.java)
         startActivity(mainIntent)
+        overridePendingTransition(0, 0)
+        finish()
     }
 }
