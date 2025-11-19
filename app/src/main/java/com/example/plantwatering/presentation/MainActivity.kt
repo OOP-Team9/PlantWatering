@@ -10,12 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.plantwatering.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.components.AppNavigation
-enum class Screens {
-    HomeScreen,
-    TipScreen,
-    WateringScreen,
-    AlarmScreen
-}
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

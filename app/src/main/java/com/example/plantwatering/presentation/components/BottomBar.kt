@@ -13,18 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Alarm
-import androidx.compose.material.icons.filled.Grass
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.WaterDrop
-import androidx.compose.material.icons.outlined.Alarm
-import androidx.compose.material.icons.outlined.Grass
-import androidx.compose.material.icons.outlined.List
-import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -49,15 +39,31 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+
+//Navagation
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.plantwatering.presentation.AlarmScreen
-import com.example.plantwatering.presentation.HomeScreen
-import com.example.plantwatering.presentation.Screens
-import com.example.plantwatering.presentation.TipScreen
-import com.example.plantwatering.presentation.WateringScreen
+
+//Screen
+import com.example.plantwatering.presentation.screen.AlarmScreen
+import com.example.plantwatering.presentation.screen.HomeScreen
+import com.example.plantwatering.presentation.screen.TipScreen
+import com.example.plantwatering.presentation.screen.WateringScreen
+
+//Icons
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Alarm
+import androidx.compose.material.icons.filled.Grass
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.WaterDrop
+import androidx.compose.material.icons.outlined.Alarm
+import androidx.compose.material.icons.outlined.Grass
+import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.WaterDrop
+
+//Colors
 import com.example.plantwatering.ui.theme.AlarmOffGray
 import com.example.plantwatering.ui.theme.BackGroundGreen
 import com.example.plantwatering.ui.theme.BoxGreen
@@ -75,35 +81,41 @@ data class BottomNavigationItem(
     val route: String
 )
 
+enum class Routes { // enum 으로 루트 관리 방법 사용 중 -> name 프로퍼티 자동 제공
+    HomeScreen,
+    TipScreen,
+    WateringScreen,
+    AlarmScreen
+}
+
 val items = listOf(
     BottomNavigationItem(
         title = "Home",
         selectedIcon = Icons.Filled.Grass,
         unselectedIcon = Icons.Outlined.Grass,
-        route = Screens.HomeScreen.name
+        route = Routes.HomeScreen.name
     ),
     BottomNavigationItem(
         title = "Tip",
         selectedIcon = Icons.Filled.List,
         unselectedIcon = Icons.Outlined.List,
-        route = Screens.TipScreen.name
+        route = Routes.TipScreen.name
     ),
     BottomNavigationItem(
         title = "Water",
         selectedIcon = Icons.Filled.WaterDrop,
         unselectedIcon = Icons.Outlined.WaterDrop,
-        badgeCount = 3,
-        route = Screens.WateringScreen.name
+        badgeCount = 3, //상태 기반으로 변경
+        route = Routes.WateringScreen.name
     ),
     BottomNavigationItem(
         title = "Alarm",
         selectedIcon = Icons.Filled.Alarm,
         unselectedIcon = Icons.Outlined.Alarm,
-        route = Screens.AlarmScreen.name
+        route = Routes.AlarmScreen.name
     ),
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigation(){
     val navController : NavHostController = rememberNavController()
@@ -191,19 +203,19 @@ fun AppNavigation(){
         ){paddingValues ->
             NavHost(
                 navController = navController,
-                startDestination = Screens.HomeScreen.name,
+                startDestination = Routes.HomeScreen.name,
                 modifier = Modifier.padding(paddingValues)
             ){
-                composable(route = Screens.HomeScreen.name){
+                composable(route = Routes.HomeScreen.name){
                     HomeScreen()
                 }
-                composable(route = Screens.TipScreen.name){
+                composable(route = Routes.TipScreen.name){
                     TipScreen()
                 }
-                composable(route = Screens.WateringScreen.name){
+                composable(route = Routes.WateringScreen.name){
                     WateringScreen()
                 }
-                composable(route = Screens.AlarmScreen.name){
+                composable(route = Routes.AlarmScreen.name){
                     AlarmScreen()
                 }
             }
