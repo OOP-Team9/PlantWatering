@@ -1,4 +1,4 @@
-package com.example.plantwatering.presentation.screen
+package com.example.plantwatering.presentation.screen.alarm
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,11 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TipScreen(){
+fun AlarmScreen(){
     Box(modifier = Modifier
         .fillMaxSize(),
         contentAlignment = Alignment.Center){
-        Text(text = "TipScreen",
+        Text(text = "AlarmScreen",
             fontSize = 22.sp)
     }
 }

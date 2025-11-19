@@ -1,4 +1,4 @@
-package com.example.plantwatering.presentation.screen
+package com.example.plantwatering.presentation.screen.watering
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
