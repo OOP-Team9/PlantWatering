@@ -1,4 +1,4 @@
-package com.example.plantwatering.ui.theme
+package com.example.plantwatering.presentation.model.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
