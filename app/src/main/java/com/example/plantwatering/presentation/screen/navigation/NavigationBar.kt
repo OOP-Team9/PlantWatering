@@ -58,6 +58,7 @@ import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.Grass
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.WaterDrop
+import androidx.compose.ui.draw.dropShadow
 import com.example.plantwatering.presentation.model.NavigationItem
 import com.example.plantwatering.presentation.model.enums.Routes
 
