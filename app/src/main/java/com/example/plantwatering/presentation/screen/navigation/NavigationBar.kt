@@ -1,6 +1,7 @@
 package com.example.plantwatering.presentation.screen.navigation
 
 import android.graphics.BlurMaskFilter
+import android.graphics.RegionIterator
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -68,6 +69,7 @@ import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
 import com.example.plantwatering.presentation.model.ui.theme.White
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
+import com.example.plantwatering.presentation.screen.home.Route
 
 val items = listOf(
     NavigationItem(

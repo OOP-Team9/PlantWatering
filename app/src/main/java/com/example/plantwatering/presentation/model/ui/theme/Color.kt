@@ -21,3 +21,5 @@ val StatusRed = Color(0xFFF66464)
 val SearchGray = Color(0xFFF2F2F2)
 val StrokeGray = Color(0xFF767676)
 val AlarmOffGray = Color(0xFFA2A2A2)
+
+val logo = Color(0xFFFCFCFC)
