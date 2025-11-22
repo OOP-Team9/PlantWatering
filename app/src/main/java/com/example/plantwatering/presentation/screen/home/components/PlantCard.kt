@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.R
+import com.example.plantwatering.presentation.model.ui.theme.StatusRed
 import com.example.plantwatering.presentation.model.ui.theme.logo
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import com.example.plantwatering.presentation.screen.home.HomeScreen
@@ -71,7 +72,7 @@ fun PlantCard(
 
                     Box(
                         modifier = Modifier
-                            .background(Color.Red, RoundedCornerShape(20.dp))
+                            .background(StatusRed, RoundedCornerShape(20.dp))
                             .padding(horizontal = 12.dp, vertical = 4.dp)
                     ){
                         Text(
