@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,6 +18,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.presentation.model.enums.WaterTab
@@ -33,19 +37,29 @@ fun WateringScreen(){
     Column {
         InfoBox(3,plants)
         // 탭 버튼
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 10.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ){
-            TabButton("물 주기", selectedTab == WaterTab.WATER) {
-                selectedTab = WaterTab.WATER
+        Box(){
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ){
+                TabButton("물 주기", selectedTab == WaterTab.WATER) {
+                    selectedTab = WaterTab.WATER
+                }
+                TabButton("히스토리", selectedTab == WaterTab.HISTORY) {
+                    selectedTab = WaterTab.HISTORY
+                }
             }
-            TabButton("히스토리", selectedTab == WaterTab.HISTORY) {
-                selectedTab = WaterTab.HISTORY
-            }
+            Divider(
+                color = Color.LightGray,
+                thickness = 1.dp,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            )
         }
+
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -55,4 +69,10 @@ fun WateringScreen(){
             WaterTab.HISTORY -> WaterHistory()
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WateringScreenPre() {
+    WateringScreen()
 }

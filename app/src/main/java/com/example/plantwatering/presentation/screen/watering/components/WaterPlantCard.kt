@@ -106,6 +106,8 @@ fun WaterPlantCard(
                     fontFamily = testFamily,
                     color = StrokeGray
                 )
+                // 다음 급수 계산
+                // (마지막 급수일 + 주기) - (오늘 날짜)
                 Text(
                     text = "다음 급수 D-DAY",
                     fontSize = 15.sp,
