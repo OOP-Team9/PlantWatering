@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -35,7 +36,7 @@ fun WateringScreen(){
     var selectedTab by remember { mutableStateOf(WaterTab.WATER) }
     // 기본은 물 주기 탭으로 설정
     Column {
-        InfoBox(3,plants)
+        InfoBox(3,plants) // 여기에 물 줘야 하는 식물 데이터
         // 탭 버튼
         Box(){
             Row (

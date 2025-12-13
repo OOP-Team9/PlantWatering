@@ -29,12 +29,12 @@ fun TabButton(
     Text(
         text = text,
         modifier = Modifier
-            .padding(8.dp)
+            .padding(9.5.dp)
             .clickable { onClick() }
             .drawBehind{
                 val stroke = 2.dp.toPx()
                 val space = 45.dp.toPx()
-                val bottomSpace = 10.dp.toPx()
+                val bottomSpace =10.dp.toPx()
                 drawLine(
                     color = underlineColor,
                     start = Offset(-space, size.height + bottomSpace),
