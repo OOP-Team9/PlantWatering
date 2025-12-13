@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -25,17 +26,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.presentation.model.enums.WaterTab
 import com.example.plantwatering.presentation.screen.watering.components.InfoBox
+import com.example.plantwatering.presentation.screen.watering.components.Plant
 import com.example.plantwatering.presentation.screen.watering.components.TabButton
 import com.example.plantwatering.presentation.screen.watering.components.WaterHistory
 import com.example.plantwatering.presentation.screen.watering.components.WaterList
 import com.example.plantwatering.presentation.screen.watering.components.plants
 
 @Composable
-fun WateringScreen(){
+fun WateringScreen(
+){
     var selectedTab by remember { mutableStateOf(WaterTab.WATER) }
     // 기본은 물 주기 탭으로 설정
     Column {
-        InfoBox(3,plants)
+        InfoBox(3,plants) // 여기에 물 줘야 하는 식물 데이터
         // 탭 버튼
         Box(){
             Row (
@@ -65,7 +68,7 @@ fun WateringScreen(){
 
         // 탭에 따라 내용 전환
         when (selectedTab) {
-            WaterTab.WATER -> WaterList()
+            WaterTab.WATER -> WaterList(plants)
             WaterTab.HISTORY -> WaterHistory()
         }
     }
