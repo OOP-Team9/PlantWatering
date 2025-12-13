@@ -26,7 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.R
+import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
 import com.example.plantwatering.presentation.model.ui.theme.StatusRed
+import com.example.plantwatering.presentation.model.ui.theme.dropShadow
 import com.example.plantwatering.presentation.model.ui.theme.logo
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import com.example.plantwatering.presentation.screen.home.HomeScreen
@@ -42,21 +44,25 @@ fun PlantCard(
     Box(
         modifier = Modifier
             .width(383.dp)
-            .wrapContentHeight()
-            .background(Color.White, RoundedCornerShape(15.dp))
+            .wrapContentHeight() //내용물 높이만큼
+            .dropShadow(
+                shape = RoundedCornerShape(15.dp),
+                blur = 4.dp
+            )
+            .background(Color.White, RoundedCornerShape(15.dp)) //박스 색깔->이거 안하면 shadow 이상해짐
             .padding(top = 15.dp, end = 15.dp, bottom = 15.dp)
     ){
         Row(
-            modifier = Modifier.wrapContentSize()
+            modifier = Modifier.wrapContentSize() //가로세로 딱맞게
         ){
             Image(
                 painter= painterResource(id = R.drawable.plant),
-                contentDescription = null,
+                contentDescription = "식물 사진",
                 modifier = Modifier
                     .size(125.dp)
             )
             Column (
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth() //row는 애가 원하는 만큼 width가짐
             ){
                 Row (
                     modifier = Modifier.fillMaxWidth(),
@@ -72,14 +78,13 @@ fun PlantCard(
 
                     Box(
                         modifier = Modifier
-                            .background(StatusRed, RoundedCornerShape(20.dp))
-                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                            .background(StatusRed, RoundedCornerShape(20.dp)) //나중에 상태별로 색깔 달라야 됨
+                            .padding(horizontal = 12.dp, vertical = 4.dp) //왼.오/상.하
                     ){
                         Text(
                             text = "물 필요",
                             color = Color.White,
                             fontSize = 14.sp,
-                            fontWeight = FontWeight.SemiBold,
                             fontFamily = testFamily
                         )
                     }
@@ -88,7 +93,6 @@ fun PlantCard(
                 Column(
                     modifier = Modifier
                         .padding(top = 8.dp)
-                        .background(Color.White)
                 ) {
                     Text(
                         text = "급수 주기: $period",
@@ -106,7 +110,7 @@ fun PlantCard(
                 Box(
                     modifier = Modifier
                         .padding(top = 8.dp)
-                        .background(Color(0xFF5AB75E), RoundedCornerShape(25.dp))
+                        .background(ButtonGreen, RoundedCornerShape(25.dp))
                         .fillMaxWidth()
                         .height(40.dp)
                         .clickable { onWriteClick() },

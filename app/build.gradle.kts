@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.transportation.consumer)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.benchmark.traceprocessor)
+    implementation(libs.androidx.foundation.layout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

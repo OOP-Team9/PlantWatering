@@ -4,5 +4,6 @@ enum class Routes { // enum 으로 루트 관리 방법 사용 중 -> name 프�
     HomeScreen,
     TipScreen,
     WateringScreen,
-    AlarmScreen
+    AlarmScreen,
+    RegisterScreen
 }
