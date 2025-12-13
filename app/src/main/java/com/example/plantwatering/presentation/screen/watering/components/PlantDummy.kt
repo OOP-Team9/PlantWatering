@@ -32,5 +32,12 @@ val plants = listOf(
         wateringInterval =  7,
         nextWateringDate =  "2025.11.29",
         wateringStatus = true
+    ),
+    Plant(
+        name = "로즈마리",
+        imageUrl = "url",
+        wateringInterval =  7,
+        nextWateringDate =  "2025.11.29",
+        wateringStatus = true
     )
 )

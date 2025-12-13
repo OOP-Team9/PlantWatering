@@ -1,27 +1,82 @@
 package com.example.plantwatering.presentation.screen.watering.components
 
+import android.R.attr.onClick
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
+import com.example.plantwatering.presentation.model.ui.theme.testFamily
+import com.example.plantwatering.presentation.screen.navigation.items
 
 @Composable
-fun WaterList(){
+fun WaterList(
+    plants: List<Plant>
+){
     Column(){
-        WaterPlantCard(
-            plants[0], onClick = {}
-        )
-        WaterPlantCard(
-            plants[1], onClick = {}
-        )
-        WaterPlantCard(
-            plants[2], onClick = {}
-        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 375.dp)
+        ) {
+            items(plants){ plant ->
+                WaterPlantCard(
+                    plant = plant,
+                    onClick = {}
+                )
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, start = 14.dp, end = 14.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .background(
+                        color = ButtonGreen,
+                        shape = RoundedCornerShape(25.dp)
+                    )
+                    .width(70.dp)
+                    .height(40.dp)
+                    .clickable { },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "저장",
+                    fontFamily = testFamily,
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+            }
+        }
+
     }
 
 }
@@ -29,5 +84,5 @@ fun WaterList(){
 @Preview(showBackground = true)
 @Composable
 fun WaterListPre() {
-    WaterList()
+    WaterList(plants)
 }
