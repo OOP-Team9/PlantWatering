@@ -11,14 +11,19 @@ import com.example.plantwatering.R
 val testFamily = FontFamily(
     Font(R.font.gowunbatang_bold)
 )
+
+val AppTypography = Typography(
+    defaultFontFamily = testFamily
+)
+/*
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = testFamily,
-        //fontSize = 16.sp,
-        //lineHeight = 24.sp,
-        //letterSpacing = 0.5.sp
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
     )
-    /* Other default text styles to override
+    Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -33,5 +38,4 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     )
-    */
-)
+)*/
