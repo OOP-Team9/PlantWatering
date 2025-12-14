@@ -6,14 +6,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.example.plantwatering.presentation.screen.alarm.components.AlarmInfoBox
+import com.example.plantwatering.presentation.screen.watering.WateringScreen
 
 @Composable
 fun AlarmScreen(){
-    Box(modifier = Modifier
-        .fillMaxSize(),
-        contentAlignment = Alignment.Center){
-        Text(text = "AlarmScreen",
-            fontSize = 22.sp)
-    }
+    AlarmInfoBox()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AlarmScreenPre() {
+    AlarmScreen()
 }
