@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+apply(plugin = "com.google.gms.google-services")
+
 android {
     namespace = "com.example.plantwatering"
     compileSdk {
@@ -78,4 +80,10 @@ dependencies {
     //icons
     implementation("androidx.compose.material:material-icons-core")
     implementation("androidx.compose.material:material-icons-extended")
+
+    //firebase
+    implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-ai")
+    implementation("com.google.firebase:firebase-auth")
 }
