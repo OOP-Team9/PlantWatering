@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.plantwatering.R
 import com.example.plantwatering.presentation.model.ui.theme.BackGroundGreen
 import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
@@ -36,6 +37,7 @@ import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import com.example.plantwatering.presentation.screen.tip.components.PlantInfoCard
 import com.example.plantwatering.presentation.screen.tip.components.QuestionInputBox
 import com.example.plantwatering.presentation.screen.tip.components.SearchBar
+import com.example.plantwatering.presentation.viewmodel.ChatViewModel
 
 
 @Composable
@@ -60,8 +62,34 @@ fun SpeechBubbleWithImage(text: String, modifier: Modifier) {
         )
     }
 }
+
 @Composable
-fun TipScreen(){
+fun AnswerBox(text: String){
+    if(text.isBlank()) return
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(16.dp)
+    ) {
+        Text(
+            text = text,
+            fontFamily = testFamily,
+            fontSize = 14.sp,
+            color = Color.Black
+        )
+    }
+}
+@Composable
+fun TipScreen(
+    chatViewModel: ChatViewModel = viewModel()
+){
+    val answer = chatViewModel.answer
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -112,10 +140,14 @@ fun TipScreen(){
                 )
             }
 
+            AnswerBox(text = answer)
+
             QuestionInputBox(
                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp),
-                onSendClick = { inputText ->
-                    // TODO: Gemini API 연동 예정
+                onSendClick = { input ->
+                    if(input.isNotBlank()) {
+                        chatViewModel.sendMessage(input)
+                    }
                 }
             )
         }
