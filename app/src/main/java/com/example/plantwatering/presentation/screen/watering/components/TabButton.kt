@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.example.plantwatering.presentation.model.ui.theme.AlarmOffGray
 import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 
 @Composable
@@ -43,13 +44,12 @@ fun TabButton(
                 )
             },
         color = if (selected) ButtonGreen else AlarmOffGray,
-        fontSize = 18.sp,
-        fontFamily = testFamily
+        fontSize = 18.sp
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun TabButtonPre(){
-    TabButton("물 주기", true, onClick = {})
+    PlantWateringTheme{ TabButton("물 주기", true, onClick = {}) }
 }

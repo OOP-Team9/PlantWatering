@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.room.util.TableInfo
 import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 
 @Composable
@@ -66,8 +67,10 @@ fun PlantTipBox(
 @Preview(showBackground = true)
 @Composable
 fun PlantTipBoxPreview(){
-    PlantTipBox(
-        "오늘의 식물 팁",
-        "화분 바닥에 배수 구멍이 있어야 뿌리가 썩지 않아요."
-    )
+    PlantWateringTheme {
+        PlantTipBox(
+            "오늘의 식물 팁",
+            "화분 바닥에 배수 구멍이 있어야 뿌리가 썩지 않아요."
+        )
+    }
 }

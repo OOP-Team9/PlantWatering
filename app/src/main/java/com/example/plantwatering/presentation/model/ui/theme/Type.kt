@@ -11,14 +11,43 @@ import com.example.plantwatering.R
 val testFamily = FontFamily(
     Font(R.font.gowunbatang_bold)
 )
+
+//val AppTypography = Typography(
+//    bodyLarge = TextStyle(
+//        fontFamily = testFamily,
+//        fontSize = 16.sp,
+//        lineHeight = 24.sp,
+//        letterSpacing = 0.5.sp
+//    )
+//)
+val base = Typography()
+val AppTypography = base.copy(
+    displayLarge = base.displayLarge.copy(fontFamily = testFamily),
+    displayMedium = base.displayMedium.copy(fontFamily = testFamily),
+    displaySmall = base.displaySmall.copy(fontFamily = testFamily),
+    headlineLarge = base.headlineLarge.copy(fontFamily = testFamily),
+    headlineMedium = base.headlineMedium.copy(fontFamily = testFamily),
+    headlineSmall = base.headlineSmall.copy(fontFamily = testFamily),
+    titleLarge = base.titleLarge.copy(fontFamily = testFamily),
+    titleMedium = base.titleMedium.copy(fontFamily = testFamily),
+    titleSmall = base.titleSmall.copy(fontFamily = testFamily),
+    bodyLarge = base.bodyLarge.copy(fontFamily = testFamily),
+    bodyMedium = base.bodyMedium.copy(fontFamily = testFamily),
+    bodySmall = base.bodySmall.copy(fontFamily = testFamily),
+    labelLarge = base.labelLarge.copy(fontFamily = testFamily),
+    labelMedium = base.labelMedium.copy(fontFamily = testFamily),
+    labelSmall = base.labelSmall.copy(fontFamily = testFamily),
+)
+
+/*
 val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = testFamily,
-        //fontSize = 16.sp,
-        //lineHeight = 24.sp,
-        //letterSpacing = 0.5.sp
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
     )
-    /* Other default text styles to override
+    Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -33,5 +62,4 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     )
-    */
-)
+)*/

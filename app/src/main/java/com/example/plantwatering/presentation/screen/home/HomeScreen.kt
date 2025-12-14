@@ -23,6 +23,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.plantwatering.presentation.model.ui.theme.BackGroundGreen
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.screen.home.components.PlantCard
 import com.example.plantwatering.presentation.screen.home.components.PlantTipBox
 import com.example.plantwatering.presentation.screen.register.RegisterScreen
@@ -120,5 +121,7 @@ private fun HomeMainScreen(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    PlantWateringTheme {
+        HomeScreen()
+    }
 }

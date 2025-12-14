@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.R
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.StrokeGray
 import com.example.plantwatering.presentation.model.ui.theme.White
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
@@ -83,8 +84,7 @@ fun WaterPlantCard(
                 ) {
                     Text(
                         text = plant.name,
-                        fontSize = 17.sp,
-                        fontFamily = testFamily
+                        fontSize = 17.sp
                     )
 
                     val icon = when (status) {
@@ -103,7 +103,6 @@ fun WaterPlantCard(
                 Text(
                     text = "물 주기: ${plant.wateringInterval}일",
                     fontSize = 15.sp,
-                    fontFamily = testFamily,
                     color = StrokeGray
                 )
                 // 다음 급수 계산
@@ -111,7 +110,6 @@ fun WaterPlantCard(
                 Text(
                     text = "다음 급수 D-DAY",
                     fontSize = 15.sp,
-                    fontFamily = testFamily,
                     color = Color(0xFF0084FF)
                 )
             }
@@ -123,7 +121,9 @@ fun WaterPlantCard(
 @Preview(showBackground = true)
 @Composable
 fun WaterPlantCardPre() {
-    WaterPlantCard(
-        plants[2], onClick = {}
-    )
+    PlantWateringTheme {
+        WaterPlantCard(
+            plants[2], onClick = {}
+        )
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.plantwatering.presentation.model.ui.theme
+package com.example.plantcare.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -33,7 +33,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun PlantWateringTheme(
+fun MyApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
@@ -49,13 +49,9 @@ fun PlantWateringTheme(
         else -> LightColorScheme
     }
 
-
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = AppTypography,
-//        typography = MaterialTheme.typography.copy(
-//            bodyLarge = MaterialTheme.typography.bodyLarge.copy(fontFamily = testFamily) // Material 3
-//        ),
+        typography = Typography,
         content = content
     )
 }
