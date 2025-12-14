@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import com.example.plantwatering.presentation.screen.watering.components.Plant
 import com.example.plantwatering.presentation.screen.watering.components.plants
@@ -41,7 +42,7 @@ fun AlarmInfoBox(){
                     text = "알람으로 물주기 \n" +
                             "놓치지 마세요 \uD83D\uDCA6",
                     fontSize = 25.sp,
-                    fontFamily = testFamily
+                    lineHeight = 35.sp
                 )
                 AddCircleButton { onClick }
             }
@@ -49,8 +50,7 @@ fun AlarmInfoBox(){
             Row(){
                 Text(
                     text = "설정한 시간에 급수일인 식물 이름과 함께 알람을 보낼게요!",
-                    fontSize = 14.5.sp,
-                    fontFamily = testFamily
+                    fontSize = 14.sp,
                 )
             }
 
@@ -62,5 +62,7 @@ fun AlarmInfoBox(){
 @Preview(showBackground = true)
 @Composable
 fun AlarmInfoBoxPre() {
-    AlarmInfoBox()
+    PlantWateringTheme {
+        AlarmInfoBox()
+    }
 }

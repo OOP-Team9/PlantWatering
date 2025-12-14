@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.screen.alarm.AlarmScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -161,6 +162,8 @@ fun InputWithCheck(
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPre() {
-    RegisterScreen()
+    PlantWateringTheme {
+        RegisterScreen()
+    }
 }
 

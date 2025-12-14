@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.screen.alarm.components.AlarmInfoBox
 import com.example.plantwatering.presentation.screen.watering.WateringScreen
 
@@ -19,5 +20,7 @@ fun AlarmScreen(){
 @Preview(showBackground = true)
 @Composable
 fun AlarmScreenPre() {
-    AlarmScreen()
+    PlantWateringTheme {
+        AlarmScreen()
+    }
 }

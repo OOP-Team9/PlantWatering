@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.R
 import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 
@@ -60,8 +61,8 @@ fun PlantInfoCard(
             )
 
             Column {
-                Text(name, fontSize = 20.sp, fontFamily = testFamily)
-                Text(englishName, fontSize = 16.sp, color = Color.Gray, fontFamily = testFamily)
+                Text(name, fontSize = 20.sp)
+                Text(englishName, fontSize = 16.sp, color = Color.Gray)
             }
 
             Row(
@@ -76,7 +77,7 @@ fun PlantInfoCard(
                 InfoBox("🌫️", "습도", humidity)
             }
 
-            Text(description, fontSize = 16.sp, fontFamily = testFamily)
+            Text(description, fontSize = 16.sp)
         }
     }
 }
@@ -95,8 +96,8 @@ fun InfoBox(icon: String, title: String, value: String) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(icon, fontSize = 16.sp)
-            Text(title, fontSize = 16.sp, fontFamily = testFamily)
-            Text(value, fontSize = 16.sp, fontFamily = testFamily)
+            Text(title, fontSize = 16.sp)
+            Text(value, fontSize = 16.sp)
         }
     }
 }
@@ -104,12 +105,14 @@ fun InfoBox(icon: String, title: String, value: String) {
 @Preview(showBackground = true)
 @Composable
 fun PlantInfoCardPreview() {
-    PlantInfoCard(
-        name = "몬스테라",
-        englishName = "Monstera deliciosa",
-        light = "간접광",
-        water = "주 1-2회",
-        humidity = "중간-높음",
-        description = "큰 잎에 구멍이 생기는 특징적인 식물입니다. 과습에 주의하고 앞에 먼지가 쌓이지 않도록 관리하세요."
-    )
+    PlantWateringTheme {
+        PlantInfoCard(
+            name = "몬스테라",
+            englishName = "Monstera deliciosa",
+            light = "간접광",
+            water = "주 1-2회",
+            humidity = "중간-높음",
+            description = "큰 잎에 구멍이 생기는 특징적인 식물입니다. 과습에 주의하고 앞에 먼지가 쌓이지 않도록 관리하세요."
+        )
+    }
 }

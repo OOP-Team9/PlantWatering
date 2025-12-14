@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.example.plantwatering.R
 import com.example.plantwatering.presentation.model.ui.theme.BackGroundGreen
 import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import com.example.plantwatering.presentation.screen.tip.components.PlantInfoCard
 import com.example.plantwatering.presentation.screen.tip.components.QuestionInputBox
@@ -53,7 +54,6 @@ fun SpeechBubbleWithImage(text: String, modifier: Modifier) {
         Text(
             text = text,
             fontSize = 14.sp,
-            fontFamily = testFamily,
             modifier = Modifier
                 .align(Alignment.Center)
                 .padding(horizontal = 16.dp)
@@ -80,7 +80,6 @@ fun TipScreen(){
             Text(
                 text = "식물 도감",
                 fontSize = 23.sp,
-                fontFamily = testFamily,
                 modifier = Modifier
                     .align(Alignment.Start)
                     .padding(start = 20.dp, top = 10.dp)
@@ -125,5 +124,7 @@ fun TipScreen(){
 @Preview(showBackground = true)
 @Composable
 fun TipScreenPreview() {
-    TipScreen()
+    PlantWateringTheme {
+        TipScreen()
+    }
 }

@@ -49,9 +49,13 @@ fun PlantWateringTheme(
         else -> LightColorScheme
     }
 
+
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = AppTypography,
+//        typography = MaterialTheme.typography.copy(
+//            bodyLarge = MaterialTheme.typography.bodyLarge.copy(fontFamily = testFamily) // Material 3
+//        ),
         content = content
     )
 }

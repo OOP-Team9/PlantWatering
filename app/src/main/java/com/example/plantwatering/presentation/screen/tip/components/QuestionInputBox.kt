@@ -50,7 +50,6 @@ fun QuestionInputBox(
                 Text(
                     text = "여기에 질문을 작성해 주세요...",
                     fontSize = 14.sp,
-                    fontFamily = testFamily,
                     color = Color.DarkGray
                 )
             },
@@ -73,7 +72,7 @@ fun QuestionInputBox(
                 contentColor = Color.White
             )
         ) {
-            Text("전송", fontFamily = testFamily)
+            Text("전송")
         }
     }
 }

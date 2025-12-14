@@ -14,6 +14,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.viewmodel.DetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -151,7 +153,7 @@ fun DetailScreen(
                     .weight(1f)
                     .height(48.dp)
             ) {
-                Text("취소")
+                Text("취소", color = ButtonGreen)
             }
 
             Spacer(Modifier.width(12.dp))
@@ -174,5 +176,7 @@ fun DetailScreen(
 @Preview(showBackground = true)
 @Composable
 fun DetailScreenPre() {
-    DetailScreen()
+    PlantWateringTheme {
+        DetailScreen()
+    }
 }

@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 
@@ -48,8 +49,7 @@ fun SearchBar() {
             Text(
                 text = "식물 이름 검색하기",
                 fontSize = 16.sp,
-                color = Color(0xFF979797),
-                fontFamily = testFamily
+                color = Color(0xFF979797)
             )
         }
     }
@@ -58,5 +58,7 @@ fun SearchBar() {
 @Preview(showBackground = true)
 @Composable
 fun SearchBarPreview() {
-    SearchBar()
+    PlantWateringTheme {
+        SearchBar()
+    }
 }
