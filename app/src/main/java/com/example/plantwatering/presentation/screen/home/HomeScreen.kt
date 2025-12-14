@@ -19,6 +19,10 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,14 +30,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.plantwatering.R
+import com.example.plantwatering.presentation.model.enums.WaterTab
 import com.example.plantwatering.presentation.model.ui.theme.BackGroundGreen
 import com.example.plantwatering.presentation.screen.home.components.PlantCard
 import com.example.plantwatering.presentation.screen.home.components.PlantTipBox
+import com.example.plantwatering.presentation.screen.register.RegisterScreen
 
-sealed class Route(val route: String) {
-    object RegisterScreen : Route("register")
-    object HomeScreen : Route("home")
+private sealed class HomeRoute(val route: String) {
+    object Register : HomeRoute("register")
+    object Main : HomeRoute("home")
 }
 
 @Composable
@@ -57,7 +66,29 @@ fun PlusIcon(onClick: () -> Unit) {
 
 @Composable
 fun HomeScreen() {
+    val navController = rememberNavController()
 
+    NavHost(
+        navController = navController,
+        startDestination = "home"
+    ) {
+        composable("home") {
+            HomeMainScreen(
+                onPlusClick = {
+                    navController.navigate("register")
+                }
+            )
+        }
+
+        composable("register") {
+            RegisterScreen()
+        }
+    }
+}
+@Composable
+private fun HomeMainScreen(
+    onPlusClick: () -> Unit
+){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -92,13 +123,15 @@ fun HomeScreen() {
         }
         Box(
             modifier = Modifier
-                .align(Alignment.BottomEnd) // ← 여기
+                .align(Alignment.BottomEnd)
                 .padding(20.dp)
         ) {
-            PlusIcon { }
+            PlusIcon (onClick = onPlusClick)
         }
     }
 }
+
+
 
 
 @Preview(showBackground = true)
