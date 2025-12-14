@@ -1,15 +1,10 @@
 package com.example.plantwatering.presentation.screen.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -19,32 +14,20 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.plantwatering.R
-import com.example.plantwatering.presentation.model.enums.WaterTab
 import com.example.plantwatering.presentation.model.ui.theme.BackGroundGreen
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.screen.home.components.PlantCard
 import com.example.plantwatering.presentation.screen.home.components.PlantTipBox
 import com.example.plantwatering.presentation.screen.register.RegisterScreen
-
-private sealed class HomeRoute(val route: String) {
-    object Register : HomeRoute("register")
-    object Main : HomeRoute("home")
-}
+import com.example.plantwatering.presentation.model.enums.HomeTab
 
 @Composable
 fun PlusIcon(onClick: () -> Unit) {
@@ -71,12 +54,12 @@ fun HomeScreen() {
 
     NavHost(
         navController = navController,
-        startDestination = "home"
+        startDestination = HomeTab.HOME.route
     ) {
-        composable("home") {
+        composable(HomeTab.HOME.route) {
             HomeMainScreen(
                 onPlusClick = {
-                    navController.navigate("register")
+                    navController.navigate(HomeTab.REGISTER.route)
                 }
             )
         }
