@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import kotlin.Int
 import kotlin.String
@@ -36,14 +37,12 @@ fun InfoBox(
         ){
             Text(
                 text = "\uD83D\uDCA7 오늘 물 줄 식물: ${count}개",
-                fontSize = 20.sp,
-                fontFamily = testFamily
+                fontSize = 20.sp
             )
             Row(){
                 Text(
                     text = "\uD83C\uDF31 ",
-                    fontSize = 20.sp,
-                    fontFamily = testFamily
+                    fontSize = 20.sp
                 )
                 var list:String = ""
                 for( plant in plants){
@@ -53,8 +52,7 @@ fun InfoBox(
                 //val list = plants.joinToString(", ") { it.name }
                 Text(
                     text = "${list}",
-                    fontSize = 20.sp,
-                    fontFamily = testFamily
+                    fontSize = 20.sp
                 )
 
             }
@@ -67,8 +65,10 @@ fun InfoBox(
 @Preview(showBackground = true)
 @Composable
 fun InfoBoxPre() {
-    InfoBox(
-        3,
-        plants
-    )
+    PlantWateringTheme {
+        InfoBox(
+            3,
+            plants
+        )
+    }
 }

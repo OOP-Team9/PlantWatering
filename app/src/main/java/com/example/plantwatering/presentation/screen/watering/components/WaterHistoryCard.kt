@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.R
 import com.example.plantwatering.presentation.model.ui.theme.AlarmOffGray
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 
 @Composable
@@ -56,7 +57,6 @@ fun WaterHistoryCard(
                     Text(
                         text = plant.name,
                         fontSize = 17.sp,
-                        fontFamily = testFamily
                     )
 
                     // 업데이트 시간으로부터.. 시간 계산
@@ -65,7 +65,6 @@ fun WaterHistoryCard(
                     Text(
                         text = "${time} ${unit} 전",
                         fontSize = 15.sp,
-                        fontFamily = testFamily,
                         color = AlarmOffGray
                     )
                 }
@@ -83,7 +82,9 @@ fun WaterHistoryCard(
 @Preview(showBackground = true)
 @Composable
 fun WaterHistoryPre() {
-    WaterHistoryCard(
-        plants[2]
-    )
+    PlantWateringTheme {
+        WaterHistoryCard(
+            plants[2]
+        )
+    }
 }

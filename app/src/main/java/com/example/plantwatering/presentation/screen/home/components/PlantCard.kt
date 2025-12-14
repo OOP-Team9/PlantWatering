@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.R
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.StatusRed
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
 import com.example.plantwatering.presentation.model.ui.theme.logo
@@ -72,7 +73,6 @@ fun PlantCard(
                         text = name,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = testFamily,
                         modifier = Modifier.padding(end = 85.dp)
                     )
 
@@ -85,7 +85,6 @@ fun PlantCard(
                             text = "물 필요",
                             color = Color.White,
                             fontSize = 14.sp,
-                            fontFamily = testFamily
                         )
                     }
                 }
@@ -97,13 +96,11 @@ fun PlantCard(
                     Text(
                         text = "급수 주기: $period",
                         fontSize = 15.sp,
-                        fontFamily = testFamily,
                         color = Color.Black
                     )
                     Text(
                         text = "마지막 급수일 : $lastWatering",
                         fontSize = 15.sp,
-                        fontFamily = testFamily,
                         color = Color.Black
                     )
                 }
@@ -119,8 +116,7 @@ fun PlantCard(
                     Text(
                         text = "일지 적기",
                         color = Color.White,
-                        fontSize = 16.sp,
-                        fontFamily = testFamily
+                        fontSize = 16.sp
                     )
                 }
             }
@@ -131,10 +127,12 @@ fun PlantCard(
 @Preview(showBackground = true)
 @Composable
 fun PlantCardPre() {
-    PlantCard(
-        name = "몬스테라",
-        period = "5일",
-        lastWatering = "2025.11.04",
-        onWriteClick = { /* 일지 적기 버튼 눌렀을 때 */ }
-    )
+    PlantWateringTheme {
+        PlantCard(
+            name = "몬스테라",
+            period = "5일",
+            lastWatering = "2025.11.04",
+            onWriteClick = { /* 일지 적기 버튼 눌렀을 때 */ }
+        )
+    }
 }
