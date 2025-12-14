@@ -14,6 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.screen.navigation.AppNavigation
 import com.example.plantwatering.presentation.model.ui.theme.BackGroundGreen
+import com.example.plantwatering.presentation.screen.register.RegisterScreen
+import com.example.plantwatering.presentation.screen.register.RegisterViewModel
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
