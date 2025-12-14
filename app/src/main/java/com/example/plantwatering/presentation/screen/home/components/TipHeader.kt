@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.room.util.TableInfo
+import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 
 @Composable
@@ -32,9 +33,9 @@ fun PlantTipBox(
     Box(
         modifier = Modifier
             .width(383.dp)
-            .wrapContentHeight()
+            .wrapContentHeight() //내용물 변경될 때마다 높이 다시 조정(동적 크기 변경)
             .background(
-                color = Color(0xFFCDEBB6),
+                color = BoxGreen,
                 shape = RoundedCornerShape(15.dp)
             )
             .padding(8.dp)
