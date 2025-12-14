@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "115558971260",
+    "project_id": "plantwatering-202e9",
+    "storage_bucket": "plantwatering-202e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115558971260:android:cea70e926b6f75322256f9",
+        "android_client_info": {
+          "package_name": "com.example.plantwatering"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4C90aUWrkBYKO9mzgU5Bcz0d2o2Lze5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
