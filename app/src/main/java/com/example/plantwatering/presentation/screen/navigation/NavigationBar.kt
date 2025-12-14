@@ -69,7 +69,7 @@ import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
 import com.example.plantwatering.presentation.model.ui.theme.White
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
-import com.example.plantwatering.presentation.screen.home.Route
+import com.example.plantwatering.presentation.screen.register.RegisterScreen
 
 val items = listOf(
     NavigationItem(
