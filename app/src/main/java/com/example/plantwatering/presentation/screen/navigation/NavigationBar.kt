@@ -45,7 +45,7 @@ import androidx.navigation.compose.rememberNavController
 
 //Screen
 import com.example.plantwatering.presentation.screen.alarm.AlarmScreen
-import com.example.plantwatering.presentation.screen.home.HomeScreen
+import com.example.plantwatering.presentation.screen.home.HomeRoute
 import com.example.plantwatering.presentation.screen.tip.TipScreen
 import com.example.plantwatering.presentation.screen.watering.WateringScreen
 
@@ -189,7 +189,7 @@ fun AppNavigation(){
                 modifier = Modifier.padding(paddingValues)
             ){
                 composable(route = Routes.HomeScreen.name){
-                    HomeScreen()
+                    HomeRoute()
                 }
                 composable(route = Routes.TipScreen.name){
                     TipScreen()

@@ -3,6 +3,7 @@ package com.example.plantwatering.presentation.screen.home.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,9 +31,7 @@ import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.StatusRed
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
-import com.example.plantwatering.presentation.model.ui.theme.logo
-import com.example.plantwatering.presentation.model.ui.theme.testFamily
-import com.example.plantwatering.presentation.screen.home.HomeScreen
+
 
 
 @Composable
@@ -46,34 +45,36 @@ fun PlantCard(
         modifier = Modifier
             .width(383.dp)
             .wrapContentHeight() //내용물 높이만큼
-            .dropShadow(
+            .dropShadow( //ShadowExtensions에 있음
                 shape = RoundedCornerShape(15.dp),
                 blur = 4.dp
             )
-            .background(Color.White, RoundedCornerShape(15.dp)) //박스 색깔->이거 안하면 shadow 이상해짐
-            .padding(top = 15.dp, end = 15.dp, bottom = 15.dp)
+            .background(Color.White, RoundedCornerShape(15.dp)) //shadow 때문에 박스 색 있어야 함
+            .padding(15.dp)
     ){
         Row(
-            modifier = Modifier.wrapContentSize() //가로세로 딱맞게
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ){
             Image(
                 painter= painterResource(id = R.drawable.plant),
                 contentDescription = "식물 사진",
                 modifier = Modifier
-                    .size(125.dp)
+                    .size(110.dp)
             )
             Column (
-                modifier = Modifier.fillMaxWidth() //row는 애가 원하는 만큼 width가짐
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 12.dp)
             ){
                 Row (
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.fillMaxWidth()
                 ){
                     Text(
                         text = name,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(end = 85.dp)
+                        modifier = Modifier.padding(end = 70.dp)
                     )
 
                     Box(
@@ -94,12 +95,12 @@ fun PlantCard(
                         .padding(top = 8.dp)
                 ) {
                     Text(
-                        text = "급수 주기: $period",
+                        text = "급수 주기: ${period}",
                         fontSize = 15.sp,
                         color = Color.Black
                     )
                     Text(
-                        text = "마지막 급수일 : $lastWatering",
+                        text = "마지막 급수일 : ${lastWatering}",
                         fontSize = 15.sp,
                         color = Color.Black
                     )
@@ -126,13 +127,13 @@ fun PlantCard(
 
 @Preview(showBackground = true)
 @Composable
-fun PlantCardPre() {
+fun PlantCardPreview() {
     PlantWateringTheme {
         PlantCard(
             name = "몬스테라",
             period = "5일",
             lastWatering = "2025.11.04",
-            onWriteClick = { /* 일지 적기 버튼 눌렀을 때 */ }
+            onWriteClick = {  }
         )
     }
 }
