@@ -21,4 +21,19 @@ class PlantRepositoryImpl(
         val uid = authDs.ensureSignedIn()
         return plantDs.getPlants(uid).map { it.toDomain() }
     }
+
+    override suspend fun getPlant(plantId: String): Plant? {
+        val uid = authDs.ensureSignedIn()
+        return plantDs.getPlant(uid, plantId)?.toDomain()
+    }
+
+    override suspend fun updatePlant(plantId: String, fields: Map<String, Any?>) {
+        val uid = authDs.ensureSignedIn()
+        plantDs.updatePlant(uid, plantId, fields)
+    }
+
+    override suspend fun deletePlant(plantId: String) {
+        val uid = authDs.ensureSignedIn()
+        plantDs.deletePlant(uid, plantId)
+    }
 }

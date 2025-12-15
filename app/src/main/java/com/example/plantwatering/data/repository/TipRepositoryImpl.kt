@@ -1,7 +1,7 @@
 package com.example.plantwatering.data.repository
 
-import com.example.plantwatering.data.mapper.toDomain
 import com.example.plantwatering.data.remote.datasource.TipRemoteDataSource
+import com.example.plantwatering.data.remote.dto.toDomain
 import com.example.plantwatering.domain.model.Tip
 import com.example.plantwatering.domain.repository.TipRepository
 

@@ -103,7 +103,8 @@ private fun HomeMainScreen(
                 content = when {
                     tipState.isLoading -> "불러오는 중..."
                     tipState.error != null -> tipState.error ?: "팁을 불러오지 못했어요"
-                    else -> tipState.tip ?: ""
+                    tipState.tip.isNullOrBlank() -> "팁이 아직 준비되지 않았어요."
+                    else -> tipState.tip.orEmpty()
                 }
             )
 

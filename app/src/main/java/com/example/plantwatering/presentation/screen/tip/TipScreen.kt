@@ -16,7 +16,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,11 +38,7 @@ import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import com.example.plantwatering.presentation.screen.tip.components.PlantInfoCard
 import com.example.plantwatering.presentation.screen.tip.components.QuestionInputBox
 import com.example.plantwatering.presentation.screen.tip.components.SearchBar
-import com.example.plantwatering.presentation.viewmodel.TipViewModel
-import com.example.plantwatering.presentation.viewmodel.TipViewModelFactory
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import com.example.plantwatering.presentation.viewmodel.ChatViewModel
 
 
 @Composable
@@ -86,13 +86,9 @@ fun AnswerBox(text: String){
 }
 @Composable
 fun TipScreen(
-    tipViewModel: TipViewModel = viewModel(factory = TipViewModelFactory())
+    chatViewModel: ChatViewModel = viewModel()
 ){
-    val state by tipViewModel.uiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        tipViewModel.loadTip()
-    }
+    val answer = chatViewModel.answer
 
     Box(
         modifier = Modifier
@@ -143,11 +139,16 @@ fun TipScreen(
                 )
             }
 
-            when {
-                state.isLoading -> Text(text = "불러오는 중...", color = Color.DarkGray)
-                state.error != null -> Text(text = state.error ?: "오류", color = Color.Red)
-                else -> AnswerBox(text = state.tip ?: "")
-            }
+            AnswerBox(text = answer)
+
+            QuestionInputBox(
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp),
+                onSendClick = { input ->
+                    if(input.isNotBlank()) {
+                        chatViewModel.sendMessage(input)
+                    }
+                }
+            )
         }
     }
 }
