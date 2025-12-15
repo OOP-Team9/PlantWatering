@@ -1,6 +1,5 @@
 package com.example.plantwatering.presentation.screen.watering.components
 
-import android.R.attr.onClick
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -9,18 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeFloatingActionButton
+
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,12 +23,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
-import com.example.plantwatering.presentation.model.ui.theme.testFamily
-import com.example.plantwatering.presentation.screen.navigation.items
+
+import androidx.compose.ui.platform.LocalContext
+import com.example.plantwatering.presentation.screen.watering.components.PlantUi
 
 @Composable
 fun WaterList(
-    plants: List<Plant>
+    plants: List<PlantUi>,
+    selectedId: String?,
+    onSelect: (String) -> Unit,
+    onWater: () -> Unit
 ){
     Column(){
         LazyColumn(
@@ -47,7 +43,8 @@ fun WaterList(
             items(plants){ plant ->
                 WaterPlantCard(
                     plant = plant,
-                    onClick = {}
+                    isSelected = plant.plantId == selectedId,
+                    onClick = { onSelect(plant.plantId) }
                 )
             }
         }
@@ -66,7 +63,7 @@ fun WaterList(
                     )
                     .width(70.dp)
                     .height(40.dp)
-                    .clickable { },
+                    .clickable { onWater() },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -85,6 +82,11 @@ fun WaterList(
 @Composable
 fun WaterListPre() {
     PlantWateringTheme {
-        WaterList(plants)
+        WaterList(
+            plants = plants,
+            selectedId = plants.firstOrNull()?.plantId,
+            onSelect = {},
+            onWater = {}
+        )
     }
 }

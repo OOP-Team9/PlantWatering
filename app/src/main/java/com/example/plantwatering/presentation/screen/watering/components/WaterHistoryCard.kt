@@ -25,11 +25,18 @@ import androidx.compose.ui.unit.sp
 import com.example.plantwatering.R
 import com.example.plantwatering.presentation.model.ui.theme.AlarmOffGray
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
-import com.example.plantwatering.presentation.model.ui.theme.testFamily
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+data class HistoryUi(
+    val plantName: String,
+    val wateredAtText: String
+)
 
 @Composable
 fun WaterHistoryCard(
-    plant: Plant
+    history: HistoryUi
 ) {
 
     Box(
@@ -55,15 +62,12 @@ fun WaterHistoryCard(
                         .padding(start = 12.dp)
                 ) {
                     Text(
-                        text = plant.name,
+                        text = history.plantName,
                         fontSize = 17.sp,
                     )
 
-                    // 업데이트 시간으로부터.. 시간 계산
-                    var time:Int = 3
-                    var unit:String = "시간"
                     Text(
-                        text = "${time} ${unit} 전",
+                        text = history.wateredAtText,
                         fontSize = 15.sp,
                         color = AlarmOffGray
                     )
@@ -82,9 +86,9 @@ fun WaterHistoryCard(
 @Preview(showBackground = true)
 @Composable
 fun WaterHistoryPre() {
+    val sdf = SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA)
+    val sample = HistoryUi("몬스테라", sdf.format(Date()))
     PlantWateringTheme {
-        WaterHistoryCard(
-            plants[2]
-        )
+        WaterHistoryCard(sample)
     }
 }

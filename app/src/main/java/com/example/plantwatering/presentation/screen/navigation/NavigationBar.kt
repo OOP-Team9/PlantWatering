@@ -2,6 +2,8 @@ package com.example.plantwatering.presentation.screen.navigation
 
 import android.graphics.BlurMaskFilter
 import android.graphics.RegionIterator
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +25,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -70,38 +75,60 @@ import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
 import com.example.plantwatering.presentation.model.ui.theme.White
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
 import com.example.plantwatering.presentation.screen.register.RegisterScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.plantwatering.presentation.viewmodel.WateringViewModel
+import com.example.plantwatering.presentation.viewmodel.WateringViewModelFactory
 
-val items = listOf(
-    NavigationItem(
-        title = "Home",
-        selectedIcon = Icons.Filled.Grass,
-        unselectedIcon = Icons.Outlined.Grass,
-        route = Routes.HomeScreen.name
-    ),
-    NavigationItem(
-        title = "Tip",
-        selectedIcon = Icons.Filled.List,
-        unselectedIcon = Icons.Outlined.List,
-        route = Routes.TipScreen.name
-    ),
-    NavigationItem(
-        title = "Water",
-        selectedIcon = Icons.Filled.WaterDrop,
-        unselectedIcon = Icons.Outlined.WaterDrop,
-        badgeCount = 3,
-        route = Routes.WateringScreen.name
-    ),
-    NavigationItem(
-        title = "Alarm",
-        selectedIcon = Icons.Filled.Alarm,
-        unselectedIcon = Icons.Outlined.Alarm,
-        route = Routes.AlarmScreen.name
-    )
-)
-
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(){
     val navController : NavHostController = rememberNavController()
+
+    val wateringVm: WateringViewModel = viewModel(factory = WateringViewModelFactory())
+    val wateringState = wateringVm.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        wateringVm.loadPlants()
+    }
+
+    val dueCount by remember(wateringState.value.plants) {
+        derivedStateOf {
+            val nowMillis = System.currentTimeMillis()
+            wateringState.value.plants.count { plant ->
+                val next = plant.nextWateringAt.toEpochMilli()
+                // 오늘/지남 && 아직 안 준 경우만 카운트
+                next <= nowMillis && !plant.wateringStatus
+            }
+        }
+    }
+
+    val items = listOf(
+        NavigationItem(
+            title = "Home",
+            selectedIcon = Icons.Filled.Grass,
+            unselectedIcon = Icons.Outlined.Grass,
+            route = Routes.HomeScreen.name
+        ),
+        NavigationItem(
+            title = "Tip",
+            selectedIcon = Icons.Filled.List,
+            unselectedIcon = Icons.Outlined.List,
+            route = Routes.TipScreen.name
+        ),
+        NavigationItem(
+            title = "Water",
+            selectedIcon = Icons.Filled.WaterDrop,
+            unselectedIcon = Icons.Outlined.WaterDrop,
+            badgeCount = if (dueCount > 0) dueCount else null,
+            route = Routes.WateringScreen.name
+        ),
+        NavigationItem(
+            title = "Alarm",
+            selectedIcon = Icons.Filled.Alarm,
+            unselectedIcon = Icons.Outlined.Alarm,
+            route = Routes.AlarmScreen.name
+        )
+    )
 
     var selectedItemIndex by remember {
         mutableStateOf(0)
