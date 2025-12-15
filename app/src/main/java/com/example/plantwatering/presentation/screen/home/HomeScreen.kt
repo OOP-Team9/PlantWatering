@@ -28,50 +28,59 @@ import com.example.plantwatering.presentation.screen.home.components.PlantCard
 import com.example.plantwatering.presentation.screen.home.components.PlantTipBox
 import com.example.plantwatering.presentation.screen.register.RegisterScreen
 import com.example.plantwatering.presentation.model.enums.HomeTab
+import com.example.plantwatering.presentation.model.ui.theme.Plusicon
+import com.example.plantwatering.presentation.screen.register.DetailScreen
 
 @Composable
-fun PlusIcon(onClick: () -> Unit) {
+fun PlusIcon(onClick: () -> Unit) { //입력 안 받고 반환값 없고
     LargeFloatingActionButton(
-        onClick = { onClick() },
+        onClick = { onClick() }, //람다함수
         shape = CircleShape,
-        containerColor = Color(0xFFCFD0CC),
+        containerColor = Plusicon,
         contentColor = Color.White,
-        elevation = FloatingActionButtonDefaults.elevation(0.dp),
+        elevation = FloatingActionButtonDefaults.elevation(0.dp), //그림자 없음(FAB 기본값 없애기)
         modifier = Modifier.size(70.dp)
     ) {
         Icon(
             Icons.Filled.Add,
-            null,
+            "RegisterScreen으로 이동",
             modifier = Modifier.size(40.dp),
-            tint = Color.White
-            )
+        )
     }
 }
 
 @Composable
-fun HomeScreen() {
-    val navController = rememberNavController()
+fun HomeRoute() {
+    val navController = rememberNavController() //리컴포지션이 일어나도 같은 컨트롤러 계속 유지
 
     NavHost(
         navController = navController,
         startDestination = HomeTab.HOME.route
     ) {
-        composable(HomeTab.HOME.route) {
-            HomeMainScreen(
+        composable(HomeTab.HOME.route) { //route가 HOME일 때 보여줄 화면
+            HomeScreen(
                 onPlusClick = {
                     navController.navigate(HomeTab.REGISTER.route)
+                },
+                onWriteClick = {
+                    navController.navigate(HomeTab.DETAIL.route)
                 }
             )
         }
 
-        composable("register") {
+        composable(HomeTab.REGISTER.route) {
             RegisterScreen()
+        }
+
+        composable(HomeTab.DETAIL.route) {
+            DetailScreen()
         }
     }
 }
 @Composable
-private fun HomeMainScreen(
-    onPlusClick: () -> Unit
+fun HomeScreen(
+    onPlusClick: () -> Unit,
+    onWriteClick: () -> Unit
 ){
     Box(
         modifier = Modifier
@@ -95,14 +104,14 @@ private fun HomeMainScreen(
                 name = "몬스테라",
                 period = "5일",
                 lastWatering = "2025.11.04",
-                onWriteClick = { }
+                onWriteClick = onWriteClick
             )
 
             PlantCard(
                 name = "로즈마리",
                 period = "5일",
                 lastWatering = "2025.11.03",
-                onWriteClick = { }
+                onWriteClick = onWriteClick
             )
         }
         Box(
@@ -110,7 +119,7 @@ private fun HomeMainScreen(
                 .align(Alignment.BottomEnd)
                 .padding(20.dp)
         ) {
-            PlusIcon (onClick = onPlusClick)
+            PlusIcon (onClick = onPlusClick) //
         }
     }
 }
@@ -122,6 +131,6 @@ private fun HomeMainScreen(
 @Composable
 fun HomeScreenPreview() {
     PlantWateringTheme {
-        HomeScreen()
+        HomeRoute()
     }
 }

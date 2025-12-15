@@ -39,7 +39,7 @@ fun PlantTipBox(
                 color = BoxGreen,
                 shape = RoundedCornerShape(15.dp)
             )
-            .padding(8.dp)
+            .padding(top = 8.dp, bottom = 8.dp, start = 10.dp, end = 8.dp)
     ){
         Column(modifier = Modifier.wrapContentHeight()) {
             Text(
