@@ -83,6 +83,7 @@ fun TipDto.toDomain(): Tip = Tip(
 fun BookDto.toDomain(): Book = Book(
     bookId = bookId,
     plantName = plantName,
+    plantEngName = plantEngName,
     photoUri = photoUri,
     lightInfo = lightInfo,
     waterInfo = waterInfo,

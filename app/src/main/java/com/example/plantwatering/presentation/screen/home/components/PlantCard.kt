@@ -21,25 +21,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.R
+import com.example.plantwatering.domain.model.Plant
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.StatusRed
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
-
+import java.time.Instant
 
 
 @Composable
 fun PlantCard(
-    name: String,
-    period: String,
+    plant: Plant,
     lastWatering: String,
-    onWriteClick: () -> Unit
+    onWriteClick: (String) -> Unit
 ){
     Box(
         modifier = Modifier
@@ -57,11 +58,11 @@ fun PlantCard(
             verticalAlignment = Alignment.CenterVertically
         ){
             Image(
-                painter= painterResource(id = R.drawable.plant),
+                painter = painterResource(id = R.drawable.plant),
                 contentDescription = "식물 사진",
-                modifier = Modifier
-                    .size(110.dp)
+                modifier = Modifier.size(110.dp)
             )
+
             Column (
                 modifier = Modifier
                     .fillMaxWidth()
@@ -71,23 +72,11 @@ fun PlantCard(
                     modifier = Modifier.fillMaxWidth()
                 ){
                     Text(
-                        text = name,
+                        text = plant.name,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(end = 70.dp)
                     )
-
-                    Box(
-                        modifier = Modifier
-                            .background(StatusRed, RoundedCornerShape(20.dp)) //나중에 상태별로 색깔 달라야 됨
-                            .padding(horizontal = 12.dp, vertical = 4.dp) //왼.오/상.하
-                    ){
-                        Text(
-                            text = "물 필요",
-                            color = Color.White,
-                            fontSize = 14.sp,
-                        )
-                    }
                 }
 
                 Column(
@@ -95,12 +84,12 @@ fun PlantCard(
                         .padding(top = 8.dp)
                 ) {
                     Text(
-                        text = "급수 주기: ${period}",
+                        text = "급수 주기: ${plant.wateringIntervalDays} 일",
                         fontSize = 15.sp,
                         color = Color.Black
                     )
                     Text(
-                        text = "마지막 급수일 : ${lastWatering}",
+                        text = "마지막 급수일 : $lastWatering",
                         fontSize = 15.sp,
                         color = Color.Black
                     )
@@ -111,7 +100,7 @@ fun PlantCard(
                         .background(ButtonGreen, RoundedCornerShape(25.dp))
                         .fillMaxWidth()
                         .height(40.dp)
-                        .clickable { onWriteClick() },
+                        .clickable { onWriteClick(plant.plantId) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -130,10 +119,18 @@ fun PlantCard(
 fun PlantCardPreview() {
     PlantWateringTheme {
         PlantCard(
-            name = "몬스테라",
-            period = "5일",
+            plant = Plant(
+                plantId = "1",
+                name = "몬스테라",
+                wateringIntervalDays = 5,
+                lastWateredAt = Instant.now(),
+                nextWateringAt = Instant.now(),
+                photoUrl = null,
+                species = "Monstera deliciosa",
+                wateringStatus = false
+            ),
             lastWatering = "2025.11.04",
-            onWriteClick = {  }
+            onWriteClick = {}
         )
     }
 }
