@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.gms.google-services")
+    id("com.google.gms.google-services") version "4.4.4"
 }
 
 android {
@@ -64,7 +64,6 @@ dependencies {
     implementation(libs.transportation.consumer)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.benchmark.traceprocessor)
-    implementation(libs.androidx.foundation.layout)
     implementation(libs.androidx.compose.ui.text)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -74,18 +73,16 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    //navigation
-    implementation("androidx.navigation:navigation-compose:2.4.2")
-
     //icons
     implementation("androidx.compose.material:material-icons-core")
     implementation("androidx.compose.material:material-icons-extended")
 
     //firebase
     implementation(platform("com.google.firebase:firebase-bom:34.6.0"))
-    implementation("com.google.firebase:firebase-firestore")
 
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-ai")
-    implementation("com.google.firebase:firebase-auth")
+    // Firebase module
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }

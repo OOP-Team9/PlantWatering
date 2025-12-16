@@ -1,5 +1,7 @@
 package com.example.plantwatering.presentation.screen.watering
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +38,7 @@ import java.util.Date
 import java.util.Locale
 import java.time.Duration
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WateringScreen(
 ){
@@ -128,6 +131,7 @@ fun WateringScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun WateringScreenPre() {

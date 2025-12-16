@@ -33,78 +33,65 @@ class WateringViewModel(
     fun loadPlants() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-            runCatching { getPlantsUseCase() }
-                .onSuccess { list ->
-                    val sorted = list.sortedBy { it.nextWateringAt }
-                    val currentSelected = _uiState.value.selectedPlantId
-                    val newSelected = currentSelected ?: sorted.firstOrNull()?.plantId
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        plants = sorted,
-                        selectedPlantId = newSelected
-                    )
-                    newSelected?.let { loadHistories(it) }
-                }
-                .onFailure { e ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        error = e.message ?: "식물 불러오기 실패"
-                    )
-                }
+            try {
+                val list = getPlantsUseCase()
+                val sorted = list.sortedBy { it.nextWateringAt }
+                val currentSelected = _uiState.value.selectedPlantId
+                val newSelected = currentSelected ?: sorted.firstOrNull()?.plantId
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    plants = sorted,
+                    selectedPlantId = newSelected
+                )
+                newSelected?.let { loadHistories(it) }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = e.message ?: "식물 불러오기 실패"
+                )
+            }
         }
     }
 
     fun loadHistories(plantId: String) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-            runCatching { getHistoriesUseCase(plantId) }
-                .onSuccess { list ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        histories = list,
-                        selectedPlantId = plantId
-                    )
-                }
-                .onFailure { e ->
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        error = e.message ?: "히스토리 불러오기 실패"
-                    )
-                }
+            try {
+                val list = getHistoriesUseCase(plantId)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    histories = list,
+                    selectedPlantId = plantId
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = e.message ?: "히스토리 불러오기 실패"
+                )
+            }
         }
     }
 
     fun waterPlant(plantId: String) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isWatering = true, error = null)
-            runCatching { waterPlantUseCase(plantId) }
-                .onSuccess {
-                    // 물 주기 성공 후 목록 갱신
-                    runCatching { getPlantsUseCase() }
-                        .onSuccess { list ->
-                            _uiState.value = _uiState.value.copy(
-                                isWatering = false,
-                                plants = list,
-                                selectedPlantId = plantId
-                            )
-                        }
-                        .onFailure { e ->
-                            _uiState.value = _uiState.value.copy(
-                                isWatering = false,
-                                error = e.message ?: "식물 불러오기 실패"
-                            )
-                        }
-                }
-                .onFailure { e ->
-                    _uiState.value = _uiState.value.copy(
-                        isWatering = false,
-                        error = e.message ?: "물주기 실패"
-                    )
-                }
-                .onSuccess {
-                    // 히스토리도 최신화
-                    loadHistories(plantId)
-                }
+            try {
+                waterPlantUseCase(plantId)
+                // 물 주기 성공 후 목록 갱신
+                val list = getPlantsUseCase()
+                _uiState.value = _uiState.value.copy(
+                    isWatering = false,
+                    plants = list,
+                    selectedPlantId = plantId
+                )
+                // 히스토리도 최신화
+                loadHistories(plantId)
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isWatering = false,
+                    error = e.message ?: "물주기 실패"
+                )
+            }
         }
     }
 
