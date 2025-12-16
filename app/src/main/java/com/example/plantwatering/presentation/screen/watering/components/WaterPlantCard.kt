@@ -1,5 +1,7 @@
 package com.example.plantwatering.presentation.screen.watering.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,8 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.border
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -28,32 +32,66 @@ import com.example.plantwatering.presentation.model.ui.theme.StrokeGray
 import com.example.plantwatering.presentation.model.ui.theme.White
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
-import java.util.Date
+import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
+import java.time.Instant
+import java.time.ZoneId
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WaterPlantCard(
-    plant: Plant,
+    plant: PlantUi,
+    isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
-    //다음 급수 날과 오늘이 같고, 급수 상태가 false일 경우 -> 위험, true -> 물방울 파랑, else -> 회색 물방울
-    // 상태 계산
-//    val status: Int = when {
-//        //plant.nextWateringDate != Date() -> 0 // 현재는 하드코딩
-//        // 깔끔하게 고치기
-//        plant.nextWateringDate == "2025.11.29" && plant.wateringStatus == false -> 0
-//        plant.nextWateringDate == "2025.11.29" && plant.wateringStatus == true -> 1
-//        else -> 2
-//    }
-    val status: Int = if(plant.nextWateringDate == "2025.11.29"){
-        if(plant.wateringStatus == false) 0
-        else  1
-    }else 2
+    val status = remember(plant.wateringStatus, plant.nextWateringAtEpoch, plant.lastWateredAtEpoch) {
+        val nextDate = Instant.ofEpochMilli(plant.nextWateringAtEpoch)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+        val today = LocalDate.now()
+        val lastWateredDate = Instant.ofEpochMilli(plant.lastWateredAtEpoch)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
 
+        val isNextToday = nextDate.isEqual(today)
+        val lastWateredToday = lastWateredDate.isEqual(today)
+
+        // 규칙:
+        // 1) 급수날이 오늘이 아니면 기본 회색.
+        //    단, 오늘 물을 준 상태(wateringStatus=true && lastWateredToday=true)이면 파란 유지.
+        // 2) 급수날이 오늘이면 status로 판단: false=경고, true=파랑.
+        when {
+            !isNextToday && lastWateredToday && plant.wateringStatus -> 1 // 오늘 급수했으므로 파랑 유지
+            !isNextToday -> 2 // 급수날이 아님: 회색
+            isNextToday && !plant.wateringStatus -> 0 // 오늘이고 미급수: 경고
+            isNextToday && plant.wateringStatus -> 1 // 오늘이고 급수 완료: 파랑
+            else -> 2
+        }
+    }
+
+    val dDayText = remember(plant.nextWateringAtEpoch) {
+        val nextDate = Instant.ofEpochMilli(plant.nextWateringAtEpoch)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+        val today = LocalDate.now()
+        val days = ChronoUnit.DAYS.between(today, nextDate).toInt()
+        when {
+            days == 0 -> "D-DAY"
+            days > 0 -> "D-$days"
+            else -> "D+${kotlin.math.abs(days)}"
+        }
+    }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding( start = 14.dp, bottom = 8.dp, end = 14.dp)
+            .border(
+                width = if (isSelected) 2.dp else 0.dp,
+                color = if (isSelected) ButtonGreen else Color.Transparent,
+                shape = RoundedCornerShape(10)
+            )
             .clickable { onClick() }
             .dropShadow(shape = RoundedCornerShape(10), blur = 2.dp)
             .background(shape = RoundedCornerShape(10), color = White)
@@ -101,14 +139,14 @@ fun WaterPlantCard(
                     )
                 }
                 Text(
-                    text = "물 주기: ${plant.wateringInterval}일",
+                    text = "물 주기: ${plant.wateringIntervalDays}일",
                     fontSize = 15.sp,
                     color = StrokeGray
                 )
                 // 다음 급수 계산
                 // (마지막 급수일 + 주기) - (오늘 날짜)
                 Text(
-                    text = "다음 급수 D-DAY",
+                    text = "다음 급수 $dDayText",
                     fontSize = 15.sp,
                     color = Color(0xFF0084FF)
                 )
@@ -118,6 +156,7 @@ fun WaterPlantCard(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun WaterPlantCardPre() {

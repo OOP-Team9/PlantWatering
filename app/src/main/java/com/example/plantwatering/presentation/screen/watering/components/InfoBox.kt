@@ -25,7 +25,7 @@ import com.example.plantwatering.presentation.screen.watering.components.*
 @Composable
 fun InfoBox(
    count: Int,
-   plants: List<Plant>
+   plants: List<PlantUi>
 ){
     Box(
         modifier = Modifier

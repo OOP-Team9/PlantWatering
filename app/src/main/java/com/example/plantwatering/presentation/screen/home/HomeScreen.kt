@@ -14,6 +14,9 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +33,9 @@ import com.example.plantwatering.presentation.screen.register.RegisterScreen
 import com.example.plantwatering.presentation.model.enums.HomeTab
 import com.example.plantwatering.presentation.model.ui.theme.Plusicon
 import com.example.plantwatering.presentation.screen.register.DetailScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.plantwatering.presentation.viewmodel.TipViewModel
+import com.example.plantwatering.presentation.viewmodel.TipViewModelFactory
 
 @Composable
 fun PlusIcon(onClick: () -> Unit) { //입력 안 받고 반환값 없고
@@ -80,8 +86,14 @@ fun HomeRoute() {
 @Composable
 fun HomeScreen(
     onPlusClick: () -> Unit,
-    onWriteClick: () -> Unit
+    onWriteClick: () -> Unit,
+    tipViewModel: TipViewModel = viewModel(factory = TipViewModelFactory())
 ){
+    val tipState by tipViewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        tipViewModel.loadTip()
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -97,7 +109,12 @@ fun HomeScreen(
         ) {
             PlantTipBox(
                 title = "오늘의 식물 팁",
-                content = "화분 바닥에 배수 구멍이 있어야 뿌리가 썩지 않아요."
+                content = when {
+                    tipState.isLoading -> "불러오는 중..."
+                    tipState.error != null -> tipState.error ?: "팁을 불러오지 못했어요"
+                    tipState.tip.isNullOrBlank() -> "팁이 아직 준비되지 않았어요."
+                    else -> tipState.tip.orEmpty()
+                }
             )
 
             PlantCard(

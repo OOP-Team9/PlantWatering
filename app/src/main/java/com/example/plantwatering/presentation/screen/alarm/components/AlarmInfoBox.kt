@@ -17,9 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
-import com.example.plantwatering.presentation.model.ui.theme.testFamily
-import com.example.plantwatering.presentation.screen.watering.components.Plant
-import com.example.plantwatering.presentation.screen.watering.components.plants
 
 @Composable
 fun AlarmInfoBox(){
