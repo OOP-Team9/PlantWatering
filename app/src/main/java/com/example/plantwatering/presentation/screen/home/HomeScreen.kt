@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,8 +35,12 @@ import com.example.plantwatering.presentation.model.enums.HomeTab
 import com.example.plantwatering.presentation.model.ui.theme.Plusicon
 import com.example.plantwatering.presentation.screen.register.DetailScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.plantwatering.presentation.viewmodel.HomeViewModel
+import com.example.plantwatering.presentation.viewmodel.HomeViewModelFactory
 import com.example.plantwatering.presentation.viewmodel.TipViewModel
 import com.example.plantwatering.presentation.viewmodel.TipViewModelFactory
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun PlusIcon(onClick: () -> Unit) { //입력 안 받고 반환값 없고
@@ -68,8 +73,8 @@ fun HomeRoute() {
                 onPlusClick = {
                     navController.navigate(HomeTab.REGISTER.route)
                 },
-                onWriteClick = {
-                    navController.navigate(HomeTab.DETAIL.route)
+                onWriteClick = {plantId ->
+                    navController.navigate("${HomeTab.DETAIL.route}/$plantId")
                 }
             )
         }
@@ -78,7 +83,7 @@ fun HomeRoute() {
             RegisterScreen()
         }
 
-        composable(HomeTab.DETAIL.route) {
+        composable("${HomeTab.DETAIL.route}/{plantId}") {
             DetailScreen()
         }
     }
@@ -86,13 +91,16 @@ fun HomeRoute() {
 @Composable
 fun HomeScreen(
     onPlusClick: () -> Unit,
-    onWriteClick: () -> Unit,
-    tipViewModel: TipViewModel = viewModel(factory = TipViewModelFactory())
+    onWriteClick: (String) -> Unit,
+    tipViewModel: TipViewModel = viewModel(factory = TipViewModelFactory()),
+    homeViewModel: HomeViewModel = viewModel(factory = HomeViewModelFactory())
 ){
     val tipState by tipViewModel.uiState.collectAsState()
+    val plantState by homeViewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
         tipViewModel.loadTip()
+        homeViewModel.loadPlants()
     }
     Box(
         modifier = Modifier
@@ -117,19 +125,31 @@ fun HomeScreen(
                 }
             )
 
-            PlantCard(
-                name = "몬스테라",
-                period = "5일",
-                lastWatering = "2025.11.04",
-                onWriteClick = onWriteClick
-            )
+            when {
+                plantState.isLoading -> {
+                    Text("식물 불러오는 중...")
+                }
 
-            PlantCard(
-                name = "로즈마리",
-                period = "5일",
-                lastWatering = "2025.11.03",
-                onWriteClick = onWriteClick
-            )
+                plantState.error != null -> {
+                    Text(plantState.error ?: "에러 발생")
+                }
+
+                else -> {
+                    plantState.plants.forEach { plant ->
+                        val lastWateringText = plant.lastWateredAt
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate()
+                            .format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
+                        PlantCard(
+                            plant = plant,
+                            lastWatering = lastWateringText,
+                            onWriteClick = {
+                                onWriteClick(plant.plantId)
+                            }
+                        )
+                    }
+                }
+            }
         }
         Box(
             modifier = Modifier
@@ -148,6 +168,9 @@ fun HomeScreen(
 @Composable
 fun HomeScreenPreview() {
     PlantWateringTheme {
-        HomeRoute()
+        HomeScreen(
+            onPlusClick = {},
+            onWriteClick = {}
+        )
     }
 }

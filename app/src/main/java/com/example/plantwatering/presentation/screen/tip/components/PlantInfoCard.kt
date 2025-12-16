@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.plantwatering.R
+import com.example.plantwatering.domain.model.Book
 import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
@@ -31,12 +32,7 @@ import com.example.plantwatering.presentation.model.ui.theme.testFamily
 
 @Composable
 fun PlantInfoCard(
-    name: String,
-    englishName: String,
-    light: String,
-    water: String,
-    humidity: String,
-    description: String
+    book: Book
 ) {
     Box(
         modifier = Modifier
@@ -61,8 +57,8 @@ fun PlantInfoCard(
             )
 
             Column {
-                Text(name, fontSize = 20.sp)
-                Text(englishName, fontSize = 16.sp, color = Color.Gray)
+                Text(text = book.plantName, fontSize = 20.sp)
+                Text(text = book.plantEngName, fontSize = 16.sp, color = Color.Gray)
             }
 
             Row(
@@ -72,12 +68,12 @@ fun PlantInfoCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                InfoBox("☀️", "빛", light)
-                InfoBox("💧", "물", water)
-                InfoBox("🌫️", "습도", humidity)
+                InfoBox("☀️", "빛", book.lightInfo)
+                InfoBox("💧", "물", book.waterInfo)
+                InfoBox("🌫️", "습도", book.humidityInfo)
             }
 
-            Text(description, fontSize = 16.sp)
+            Text(text = book.description, fontSize = 16.sp)
         }
     }
 }
@@ -107,12 +103,16 @@ fun InfoBox(icon: String, title: String, value: String) {
 fun PlantInfoCardPreview() {
     PlantWateringTheme {
         PlantInfoCard(
-            name = "몬스테라",
-            englishName = "Monstera deliciosa",
-            light = "간접광",
-            water = "주 1-2회",
-            humidity = "중간-높음",
-            description = "큰 잎에 구멍이 생기는 특징적인 식물입니다. 과습에 주의하고 앞에 먼지가 쌓이지 않도록 관리하세요."
+            book = Book(
+                bookId = "1",
+                plantName = "몬스테라",
+                plantEngName = "Monstera deliciosa",
+                photoUri = "",
+                lightInfo = "간접광",
+                waterInfo = "주 1-2회",
+                humidityInfo = "중간-높음",
+                description = "큰 잎에 구멍이 생기는 특징적인 식물입니다. 과습에 주의하고 앞에 먼지가 쌓이지 않도록 관리하세요."
+            )
         )
     }
 }
