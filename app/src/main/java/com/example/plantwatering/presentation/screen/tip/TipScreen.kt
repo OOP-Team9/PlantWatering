@@ -22,15 +22,21 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.plantwatering.R
+import com.example.plantwatering.data.repository.BookRepositoryImpl
+import com.example.plantwatering.domain.repository.BookRepository
 import com.example.plantwatering.presentation.model.ui.theme.BackGroundGreen
 import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
@@ -38,7 +44,13 @@ import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import com.example.plantwatering.presentation.screen.tip.components.PlantInfoCard
 import com.example.plantwatering.presentation.screen.tip.components.QuestionInputBox
 import com.example.plantwatering.presentation.screen.tip.components.SearchBar
+import com.example.plantwatering.presentation.viewmodel.BookViewModel
+import com.example.plantwatering.presentation.viewmodel.BookViewModelFactory
 import com.example.plantwatering.presentation.viewmodel.ChatViewModel
+import com.example.plantwatering.presentation.viewmodel.TipViewModel
+import com.example.plantwatering.presentation.viewmodel.TipViewModelFactory
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 @Composable
@@ -88,6 +100,8 @@ fun AnswerBox(text: String){
 fun TipScreen(
     chatViewModel: ChatViewModel = viewModel()
 ){
+    val bookViewModel: BookViewModel = viewModel( factory = BookViewModelFactory())
+    val uiState by bookViewModel.uiState.collectAsState()
     val answer = chatViewModel.answer
 
     Box(
@@ -103,7 +117,13 @@ fun TipScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            SearchBar()
+            SearchBar(
+                onSearch = { query ->
+                    if ( query.isNotBlank()){
+                        bookViewModel.searchBook(query)
+                    }
+                }
+            )
 
             Text(
                 text = "식물 도감",
@@ -113,14 +133,9 @@ fun TipScreen(
                     .padding(start = 20.dp, top = 10.dp)
             )
 
-            PlantInfoCard(
-                name = "몬스테라",
-                englishName = "Monstera deliciosa",
-                light = "간접광",
-                water = "주 1-2회",
-                humidity = "중간-높음",
-                description = "큰 잎에 구멍이 생기는 특징적인 식물입니다. 과습에 주의하고 앞에 먼지가 쌓이지 않도록 관리하세요.",
-            )
+            uiState.book?.let { book ->
+                PlantInfoCard(book = book)
+            }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),

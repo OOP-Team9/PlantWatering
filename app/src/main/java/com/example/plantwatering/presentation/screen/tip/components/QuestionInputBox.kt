@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,14 +43,18 @@ fun QuestionInputBox(
             .fillMaxWidth()
             .background(BoxGreen, RoundedCornerShape(20.dp))
             .padding(horizontal = 5.dp, vertical = 5.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Bottom
     ) {
         OutlinedTextField(
             value = question,
             onValueChange = { newValue ->
                 question = newValue },
             modifier = Modifier
-                .height(60.dp),
+                .weight(1f)
+                .heightIn(
+                    min = 48.dp,
+                    max = 140.dp
+                ),
             placeholder = {
                 Text(
                     text = "여기에 질문을 작성해 주세요...",
@@ -57,6 +62,7 @@ fun QuestionInputBox(
                     color = Color.DarkGray
                 )
             },
+            maxLines = 5,
             shape = RoundedCornerShape(20.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.Transparent,

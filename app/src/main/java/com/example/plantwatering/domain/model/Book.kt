@@ -3,6 +3,7 @@ package com.example.plantwatering.domain.model
 data class Book(
     val bookId: String,
     val plantName: String,
+    val plantEngName: String,
     val photoUri: String,
     val lightInfo: String,
     val waterInfo: String,
