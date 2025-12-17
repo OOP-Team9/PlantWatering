@@ -4,12 +4,10 @@ import com.example.plantwatering.data.remote.dto.BookDto
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-class BookRemoteDataSourceImpl(
+class BookRemoteDataSourceImpl( //BookRemoteDataSource 인터페이스를 구현한 실제 클래스
     private val db: FirebaseFirestore
 ) : BookRemoteDataSource {
-
-    private fun booksCol() = db.collection("books")
-
+    private fun booksCol() = db.collection("books") //Firestore의 books 컬렉션을 가져오기
     override suspend fun getBooks(): List<BookDto> {
         val snap = booksCol()
             .orderBy("plantName")

@@ -18,23 +18,30 @@ data class BookUiState(
 class BookViewModel(
     private val getBookUseCase: GetBookUseCase
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(BookUiState())
     val uiState: StateFlow<BookUiState> = _uiState.asStateFlow()
 
     fun searchBook(bookId: String) {
         viewModelScope.launch {
-            _uiState.value = BookUiState(isLoading = true)
+            _uiState.value = _uiState.value.copy(
+                isLoading = true,
+                error = null
+            )
 
-            runCatching { getBookUseCase(bookId) }
-                .onSuccess { book ->
-                    _uiState.value = BookUiState(book = book)
-                }
-                .onFailure {e ->
-                    _uiState.value = BookUiState(
-                        isLoading = false,
-                        error = e.message ?: "식물 정보를 불러오지 못했어요"
-                    )
-                }
+            try {
+                val book = getBookUseCase(bookId)
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    book = book
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    error = e.message ?: "식물 정보를 불러오지 못했어요"
+                )
+            }
         }
     }
 }

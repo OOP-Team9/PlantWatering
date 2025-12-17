@@ -5,11 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.plantwatering.domain.model.Plant
 import com.example.plantwatering.domain.usecase.GetPlantsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 data class HomeUiState(
     val isLoading: Boolean = false,
@@ -17,38 +15,33 @@ data class HomeUiState(
     val error: String? = null
 )
 
-
 class HomeViewModel(
     private val getPlantsUseCase: GetPlantsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState = _uiState.asStateFlow()
-
-    private val dateFormatter: DateTimeFormatter =
-        DateTimeFormatter
-            .ofPattern("yyyy.MM.dd")
-            .withZone(ZoneId.systemDefault())
+    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     fun loadPlants() {
         viewModelScope.launch {
-            _uiState.value = HomeUiState(isLoading = true)
+            _uiState.value = _uiState.value.copy(
+                isLoading = true,
+                error = null
+            )
 
-            runCatching {
-                getPlantsUseCase()
-            }.onSuccess { plants ->
-                val sortedPlants = plants.sortedBy { it.nextWateringAt }
-                _uiState.value = HomeUiState(
-                    plants = plants.sortedBy { it.nextWateringAt }
+            try {
+                val list = getPlantsUseCase()
+                val sorted = list.sortedBy { it.wateringIntervalDays }
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    plants = sorted
                 )
-            }.onFailure { e ->
-                _uiState.value = HomeUiState(
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
                     error = e.message ?: "식물 목록을 불러오지 못했어요"
                 )
-            }
-
-            fun formatDate(instant: Instant): String {
-                return dateFormatter.format(instant)
             }
         }
     }
