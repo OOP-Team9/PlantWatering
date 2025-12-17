@@ -49,11 +49,11 @@ fun WaterList(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp, start = 14.dp, end = 14.dp)
         ) {
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
+                    .padding(top = 8.dp, end = 14.dp)
                     .background(
                         color = ButtonGreen,
                         shape = RoundedCornerShape(25.dp)

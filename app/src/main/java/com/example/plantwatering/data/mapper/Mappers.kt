@@ -20,8 +20,8 @@ fun PlantDto.toUi(): PlantUi {
         plantId = plantId,
         name = name,
         wateringIntervalDays = wateringIntervalDays,
-        nextWateringDate = next.toInstant().atZone(zone).toLocalDate(),
-        lastWateredDate = lastWateredAt.toDate().toInstant().atZone(zone).toLocalDate(),
+        nextWateringAt = next.toInstant().atZone(zone).toLocalDate(),
+        lastWateredAt = lastWateredAt.toDate().toInstant().atZone(zone).toLocalDate(),
         wateringStatus = wateringStatus,
         imageUrl = imageUrl
     )
@@ -33,8 +33,8 @@ fun Plant.toUi(): PlantUi {
         plantId = plantId,
         name = name,
         wateringIntervalDays = wateringIntervalDays,
-        nextWateringDate = next.toInstant().atZone(zone).toLocalDate(),
-        lastWateredDate = lastWateredAt.atZone(zone).toLocalDate(),
+        nextWateringAt = next.toInstant().atZone(zone).toLocalDate(),
+        lastWateredAt = lastWateredAt.atZone(zone).toLocalDate(),
         wateringStatus = wateringStatus,
         imageUrl = imageUrl
     )

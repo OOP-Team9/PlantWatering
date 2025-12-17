@@ -8,8 +8,8 @@ data class PlantUi(
     val name: String,
     val imageUrl: String? = null,
     val wateringIntervalDays: Int,
-    val nextWateringDate: java.time.LocalDate, // 정렬/표시용
-    val lastWateredDate: java.time.LocalDate,  // 오늘 물 줬는지 판단용
+    val nextWateringAt: LocalDate,
+    val lastWateredAt: LocalDate,
     val wateringStatus: Boolean
 )
 

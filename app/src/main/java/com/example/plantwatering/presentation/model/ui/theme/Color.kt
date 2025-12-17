@@ -24,4 +24,4 @@ val AlarmOffGray = Color(0xFFA2A2A2)
 
 val logo = Color(0xFFFCFCFC)
 
-val Plusicon = Color(0xFFCFD0CC)
+val PlusIcon = Color(0xFFCFD0CC)

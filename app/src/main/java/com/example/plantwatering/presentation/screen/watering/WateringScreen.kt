@@ -31,40 +31,31 @@ import com.example.plantwatering.presentation.screen.watering.components.WaterHi
 import com.example.plantwatering.presentation.screen.watering.components.WaterList
 import com.example.plantwatering.presentation.viewmodel.WateringViewModel
 import com.example.plantwatering.presentation.viewmodel.WateringViewModelFactory
-import java.util.Locale
-import java.time.Duration
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun WateringScreen(
 ){
     val vm: WateringViewModel = viewModel(factory = WateringViewModelFactory())
     // 상태 바뀌면 화면 자동 갱신
-    val state by vm.uiState.collectAsState()
+    val state = vm.uiState.collectAsState().value
 
+    // remember로 탭 유지 + by 로 상자가 아닌 바로 값을 쓸 수 있게
     var selectedTab by remember { mutableStateOf(WaterTab.WATER) }
+    // selectedId 는 상태로 받아서 사용 -> 로직과 직접적인 연관이 높아서
     val selectedId = state.selectedPlantId
 
-    //UI 용 plantUi로 ..
+    // UI 용 으로 만들어서 새 리스트로
     val uiPlants = state.plants.map { it.toUi() }
 
-    val today = LocalDate.now()
-
+    // next가 오늘 이하 or last가 오늘인 애들
     val todayUiPlants = uiPlants
-        .filter { plant ->
-            val next = plant.nextWateringDate
-            val last = plant.lastWateredDate
-            // next가 오늘 이하 or last가 오늘
-            (next <= today) || (last == today)
+        .filter { it ->
+            (it.nextWateringAt <= LocalDate.now()) || ( it.lastWateredAt == LocalDate.now())
         }
-        .sortedBy { it.nextWateringDate }
 
     Column {
         InfoBox(
-            count = todayUiPlants.size,
             plants = todayUiPlants
         )
         // 탭 버튼
@@ -75,12 +66,20 @@ fun WateringScreen(
                     .padding(top = 20.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-                TabButton("물 주기", selectedTab == WaterTab.WATER) {
+                TabButton(
+                    text = "물 주기",
+                    selected = (selectedTab == WaterTab.WATER)
+                ) {
                     selectedTab = WaterTab.WATER
                 }
-                TabButton("히스토리", selectedTab == WaterTab.HISTORY) {
+                TabButton(
+                    text = "히스토리",
+                    selected = (selectedTab == WaterTab.HISTORY)
+                ) {
                     selectedTab = WaterTab.HISTORY
-                    selectedId?.let { vm.loadHistories(it) }
+                    selectedId?.let {
+                        vm.loadHistories(it)
+                    }
                 }
             }
             //회색 줄
@@ -108,14 +107,14 @@ fun WateringScreen(
                 }
             )
             WaterTab.HISTORY -> {
-                val historyUi = state.histories.map { h ->
+                val histories = state.histories.map { h ->
                     val plantName = state.plants.firstOrNull { it.plantId == h.plantId }?.name ?: "알 수 없음"
                     HistoryUi(
                         plantName = plantName,
-                        wateredAtText = h.wateredAt.toString()
+                        wateredAtText = h.wateredAt.toString().take(10)
                     )
                 }
-                WaterHistory(historyUi)
+                WaterHistory(histories)
             }
         }
     }

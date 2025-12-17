@@ -1,7 +1,5 @@
 package com.example.plantwatering.presentation.screen.watering.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,12 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.border
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -31,11 +27,9 @@ import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.StrokeGray
 import com.example.plantwatering.presentation.model.ui.theme.White
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
-import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
-import java.time.ZoneId
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
+import java.time.Period
 
 @Composable
 fun WaterPlantCard(
@@ -43,11 +37,9 @@ fun WaterPlantCard(
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
-    val zone = ZoneId.systemDefault()
-    val todayDate = LocalDate.now(zone)
-
-    val nextDate = plant.nextWateringDate
-    val lastDate = plant.lastWateredDate
+    val todayDate = LocalDate.now()
+    val nextDate = plant.nextWateringAt
+    val lastDate = plant.lastWateredAt
 
     val status = when {
         (nextDate != todayDate) && (lastDate == todayDate) && plant.wateringStatus -> 1 // 파랑
@@ -58,11 +50,14 @@ fun WaterPlantCard(
     }
 
     // D-Day 계산
-    /** 날짜 빼는 거 지피티* */
-    val days = (nextDate.toEpochDay() - todayDate.toEpochDay()).toInt()
+    /** 날짜 빼는 거 지피티 **/
+    //val days = (nextDate.toEpochDay() - todayDate.toEpochDay()).toInt()
+
+    val days = Period.between(nextDate, todayDate).days
 
     val dDayText = when {
         days == 0 -> "D-DAY"
+        days > 31 -> "${nextDate}"
         days > 0 -> "D-$days"
         else -> ""
     }
@@ -72,7 +67,7 @@ fun WaterPlantCard(
             .fillMaxWidth()
             .padding( start = 14.dp, bottom = 8.dp, end = 14.dp)
             .border(
-                width = if (isSelected) 2.dp else 0.dp,
+                width = 2.dp,
                 color = if (isSelected) ButtonGreen else Color.Transparent,
                 shape = RoundedCornerShape(10)
             )
@@ -88,7 +83,7 @@ fun WaterPlantCard(
             // 이미지 : 더미데이터
             Image(
                 painter = painterResource(id = R.drawable.mon),
-                contentDescription = null,
+                contentDescription = "식물",
                 modifier = Modifier
                     .height(79.dp)
                     .width(70.dp)
@@ -117,7 +112,7 @@ fun WaterPlantCard(
 
                     Image(
                         painter = painterResource(id = icon),
-                        contentDescription = null,
+                        contentDescription = "상태",
                         modifier = Modifier
                             .size(28.dp)
                     )
