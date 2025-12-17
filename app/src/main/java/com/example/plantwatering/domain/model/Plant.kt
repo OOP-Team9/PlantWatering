@@ -8,7 +8,7 @@ data class Plant(
     val wateringIntervalDays: Int,
     val lastWateredAt: Instant,
     val nextWateringAt: Instant,
-    val photoUrl: String?,
+    val imageUrl: String?,
     val species: String?,
     val dailyLog: String? = null,
     val wateringStatus: Boolean = false

@@ -10,15 +10,9 @@ class TipRemoteDataSourceImpl(
 
     private fun tipsCol() = db.collection("tips")
 
-    override suspend fun getTips(): List<TipDto> {
-        val snap = tipsCol()
-            .orderBy("tipId")
-            .get()
-            .await()
-
-        return snap.documents.mapNotNull { doc ->
-            doc.toObject(TipDto::class.java)?.copy(tipId = doc.id)
-        }
+    override suspend fun getTip(tipId: String): TipDto? {
+        val doc = tipsCol().document(tipId).get().await()
+        return doc.toObject(TipDto::class.java)?.copy(tipId = doc.id)
     }
 }
 

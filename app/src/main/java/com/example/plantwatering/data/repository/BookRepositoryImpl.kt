@@ -9,6 +9,10 @@ class BookRepositoryImpl(
     private val bookDs: BookRemoteDataSource
 ) : BookRepository {
 
+    override suspend fun getBook(bookId: String): Book? {
+        return bookDs.getBook(bookId)?.toDomain()
+    }
+
     override suspend fun getBookByPlantName(plantName: String): Book? {
         return bookDs.getBooks()
             .firstOrNull { it.plantName == plantName }

@@ -1,5 +1,7 @@
 package com.example.plantwatering.presentation.screen.watering.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,6 +29,7 @@ import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import androidx.compose.ui.platform.LocalContext
 import com.example.plantwatering.presentation.screen.watering.components.PlantUi
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WaterList(
     plants: List<PlantUi>,
@@ -78,6 +81,7 @@ fun WaterList(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun WaterListPre() {
