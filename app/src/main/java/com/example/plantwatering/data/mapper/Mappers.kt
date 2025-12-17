@@ -19,8 +19,8 @@ fun PlantDto.toUi(): PlantUi {
         name = name,
         wateringIntervalDays = wateringIntervalDays,
         nextWateringDate = sdf.format(next),
-        nextWateringAtEpoch = next.time,
-        lastWateredAtEpoch = lastWateredAt.toDate().time,
+        nextWateringAt = next.time,
+        lastWateredAt = lastWateredAt.toDate().time,
         wateringStatus = wateringStatus,
         imageUrl = imageUrl
     )
@@ -33,8 +33,8 @@ fun Plant.toUi(): PlantUi {
         name = name,
         wateringIntervalDays = wateringIntervalDays,
         nextWateringDate = sdf.format(next),
-        nextWateringAtEpoch = next.time,
-        lastWateredAtEpoch = Date.from(lastWateredAt).time,
+        nextWateringAt = next.time,
+        lastWateredAt = Date.from(lastWateredAt).time,
         wateringStatus = wateringStatus,
         imageUrl = imageUrl
     )

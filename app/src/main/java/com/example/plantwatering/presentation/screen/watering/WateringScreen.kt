@@ -53,21 +53,19 @@ fun WateringScreen(
     val dateFmt = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
     val today = dateFmt.format(Date())
 
-    val dueUiPlants = uiPlants
+    val todayUiPlants = uiPlants
         .filter { plant ->
-            val next = dateFmt.format(Date(plant.nextWateringAtEpoch))
-            val last = dateFmt.format(Date(plant.lastWateredAtEpoch))
-
-            // A 로직: next가 오늘 이하 OR last가 오늘
+            val next = dateFmt.format(Date(plant.nextWateringAt))
+            val last = dateFmt.format(Date(plant.lastWateredAt))
+            // next가 오늘 이하 OR last가 오늘
             (next <= today) || (last == today)
         }
-        .sortedBy { it.nextWateringAtEpoch }
-
+        .sortedBy { it.nextWateringAt }
 
     Column {
         InfoBox(
-            count = dueUiPlants.size,
-            plants = dueUiPlants
+            count = todayUiPlants.size,
+            plants = todayUiPlants
         )
         // 탭 버튼
         Box(){

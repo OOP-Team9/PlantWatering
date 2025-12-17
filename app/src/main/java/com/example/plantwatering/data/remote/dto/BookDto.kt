@@ -1,9 +1,5 @@
 package com.example.plantwatering.data.remote.dto
 
-/**
- * 식물 도감(Book) 문서 모델.
- * - collection: /books/{bookId}
- */
 data class BookDto(
     val bookId: String = "",          // 문서 ID
     val plantName: String = "",       // 식물 이름

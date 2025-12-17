@@ -46,7 +46,6 @@ class WateringViewModel(
                     plants = plantList,
                     selectedPlantId =selectedPlantId
                 )
-                //selectedPlantId?.let { loadHistories(it) } //null이 아니면 loadHistories 실행
             } catch (e: Exception) {
                 Log.e("PlantLoad", "fail", e)
                 _uiState.value = _uiState.value.copy(

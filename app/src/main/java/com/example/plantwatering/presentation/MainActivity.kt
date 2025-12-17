@@ -25,7 +25,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         Log.e("UID!!!", "onCreate start")
         FirebaseApp.initializeApp(this)
 
@@ -44,12 +43,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /** 100% 지피티 .. **/
     private fun ensureAnonymousAuth() {
         val auth = FirebaseAuth.getInstance()
 
         Log.e("UID!!!", "currentUser=${auth.currentUser?.uid}")
-
-
 
         val opt = FirebaseApp.getInstance().options
         Log.e("UID!!!", "options.applicationId=${opt.applicationId}")

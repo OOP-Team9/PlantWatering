@@ -33,13 +33,10 @@ import com.example.plantwatering.presentation.model.ui.theme.White
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
-import java.text.SimpleDateFormat
-import java.time.Instant
 import java.time.ZoneId
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import java.util.Date
-import java.util.Locale
+import java.time.Instant
 
 @Composable
 fun WaterPlantCard(
@@ -47,28 +44,21 @@ fun WaterPlantCard(
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
-    val fmt = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
-    val todayStr = fmt.format(Date())
+    val zone = ZoneId.systemDefault()
+    val todayDate = LocalDate.now(zone)
 
-    val nextStr = fmt.format(Date(plant.nextWateringAtEpoch))
-    val lastStr = fmt.format(Date(plant.lastWateredAtEpoch))
+    val nextDate = Instant.ofEpochMilli(plant.nextWateringAt).atZone(zone).toLocalDate()
+    val lastDate = Instant.ofEpochMilli(plant.lastWateredAt).atZone(zone).toLocalDate()
 
     val status = when {
-        (nextStr != todayStr)
-                && (lastStr == todayStr)
-                && plant.wateringStatus -> 1 // 파랑
-        (nextStr != todayStr) -> 2 // 회색
-        (nextStr == todayStr) && !plant.wateringStatus -> 0 // 경고
-        (nextStr == todayStr) && plant.wateringStatus -> 1 // 파랑
+        (nextDate != todayDate) && (lastDate == todayDate) && plant.wateringStatus -> 1 // 파랑
+        (nextDate != todayDate) -> 2 // 회색
+        (nextDate == todayDate) && !plant.wateringStatus -> 0 // 경고
+        (nextDate == todayDate) && plant.wateringStatus -> 1 // 파랑
         else -> 2 // 회색
     }
 
     // D-Day 계산
-    val nextDate = Instant.ofEpochMilli(plant.nextWateringAtEpoch)
-        .atZone(ZoneId.systemDefault())
-        .toLocalDate()
-    val todayDate = LocalDate.now()
-
     val days = ChronoUnit.DAYS.between(todayDate, nextDate).toInt()
 
     val dDayText = when {
