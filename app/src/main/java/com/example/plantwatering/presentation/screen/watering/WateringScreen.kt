@@ -31,11 +31,12 @@ import com.example.plantwatering.presentation.screen.watering.components.WaterHi
 import com.example.plantwatering.presentation.screen.watering.components.WaterList
 import com.example.plantwatering.presentation.viewmodel.WateringViewModel
 import com.example.plantwatering.presentation.viewmodel.WateringViewModelFactory
-import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun WateringScreen(
@@ -50,17 +51,16 @@ fun WateringScreen(
     //UI 용 plantUi로 ..
     val uiPlants = state.plants.map { it.toUi() }
 
-    val dateFmt = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
-    val today = dateFmt.format(Date())
+    val today = LocalDate.now()
 
     val todayUiPlants = uiPlants
         .filter { plant ->
-            val next = dateFmt.format(Date(plant.nextWateringAt))
-            val last = dateFmt.format(Date(plant.lastWateredAt))
-            // next가 오늘 이하 OR last가 오늘
+            val next = plant.nextWateringDate
+            val last = plant.lastWateredDate
+            // next가 오늘 이하 or last가 오늘
             (next <= today) || (last == today)
         }
-        .sortedBy { it.nextWateringAt }
+        .sortedBy { it.nextWateringDate }
 
     Column {
         InfoBox(
@@ -108,26 +108,11 @@ fun WateringScreen(
                 }
             )
             WaterTab.HISTORY -> {
-                // 히스토리와 함께 식물 이름을 띄우기 위함
-                val nameMap = mutableMapOf<String, String>()
-                for (p in state.plants) {
-                    nameMap[p.plantId] = p.name
-                }
-
                 val historyUi = state.histories.map { h ->
-                    val duration = Duration.between(h.wateredAt, Instant.now())
-                    val text = when {
-                        duration.toMinutes() < 1 -> "방금 전"
-                        duration.toHours() < 1 -> "${duration.toMinutes()}분 전"
-                        duration.toDays() < 1 -> "${duration.toHours()}시간 전"
-                        duration.toDays() < 7 -> "${duration.toDays()}일 전"
-                        else -> {
-                            dateFmt.format(Date.from(h.wateredAt))
-                        }
-                    }
+                    val plantName = state.plants.firstOrNull { it.plantId == h.plantId }?.name ?: "알 수 없음"
                     HistoryUi(
-                        plantName = nameMap[h.plantId] ?: "알 수 없음",
-                        wateredAtText = text
+                        plantName = plantName,
+                        wateredAtText = h.wateredAt.toString()
                     )
                 }
                 WaterHistory(historyUi)

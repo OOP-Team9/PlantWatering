@@ -9,7 +9,9 @@ import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.time.ZoneId
 private val sdf = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
+private val zone = ZoneId.systemDefault()
 
 fun PlantDto.toUi(): PlantUi {
     val next = nextWateringAt.toDate()
@@ -18,9 +20,8 @@ fun PlantDto.toUi(): PlantUi {
         plantId = plantId,
         name = name,
         wateringIntervalDays = wateringIntervalDays,
-        nextWateringDate = sdf.format(next),
-        nextWateringAt = next.time,
-        lastWateredAt = lastWateredAt.toDate().time,
+        nextWateringDate = next.toInstant().atZone(zone).toLocalDate(),
+        lastWateredDate = lastWateredAt.toDate().toInstant().atZone(zone).toLocalDate(),
         wateringStatus = wateringStatus,
         imageUrl = imageUrl
     )
@@ -32,9 +33,8 @@ fun Plant.toUi(): PlantUi {
         plantId = plantId,
         name = name,
         wateringIntervalDays = wateringIntervalDays,
-        nextWateringDate = sdf.format(next),
-        nextWateringAt = next.time,
-        lastWateredAt = Date.from(lastWateredAt).time,
+        nextWateringDate = next.toInstant().atZone(zone).toLocalDate(),
+        lastWateredDate = lastWateredAt.atZone(zone).toLocalDate(),
         wateringStatus = wateringStatus,
         imageUrl = imageUrl
     )

@@ -36,7 +36,6 @@ import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
 import java.time.ZoneId
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import java.time.Instant
 
 @Composable
 fun WaterPlantCard(
@@ -47,8 +46,8 @@ fun WaterPlantCard(
     val zone = ZoneId.systemDefault()
     val todayDate = LocalDate.now(zone)
 
-    val nextDate = Instant.ofEpochMilli(plant.nextWateringAt).atZone(zone).toLocalDate()
-    val lastDate = Instant.ofEpochMilli(plant.lastWateredAt).atZone(zone).toLocalDate()
+    val nextDate = plant.nextWateringDate
+    val lastDate = plant.lastWateredDate
 
     val status = when {
         (nextDate != todayDate) && (lastDate == todayDate) && plant.wateringStatus -> 1 // 파랑
@@ -59,7 +58,8 @@ fun WaterPlantCard(
     }
 
     // D-Day 계산
-    val days = ChronoUnit.DAYS.between(todayDate, nextDate).toInt()
+    /** 날짜 빼는 거 지피티* */
+    val days = (nextDate.toEpochDay() - todayDate.toEpochDay()).toInt()
 
     val dDayText = when {
         days == 0 -> "D-DAY"
