@@ -20,7 +20,7 @@ fun RegisterScreen(viewModel: RegisterViewModel = RegisterViewModel()) {
     val interval by viewModel.wateringInterval.collectAsState()
     val lastDate by viewModel.lastWaterDate.collectAsState()
     val species by viewModel.species.collectAsState()
-    val photoUrl by viewModel.photoUrl.collectAsState()
+    val imageUrl by viewModel.imageUrl.collectAsState()
 
     var speciesExpanded by remember { mutableStateOf(false) }
     val speciesList = listOf("선택 안함", "로즈마리", "몬스테라", "스투키")
@@ -101,8 +101,8 @@ fun RegisterScreen(viewModel: RegisterViewModel = RegisterViewModel()) {
 
         // 사진 URL
         OutlinedTextField(
-            value = photoUrl,
-            onValueChange = viewModel::updatePhotoUrl,
+            value = imageUrl,
+            onValueChange = viewModel::updateImageUrl,
             label = { Text("식물 사진 URL") },
             modifier = Modifier.fillMaxWidth()
         )

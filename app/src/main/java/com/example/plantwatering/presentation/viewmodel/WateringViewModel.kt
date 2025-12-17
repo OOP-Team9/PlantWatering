@@ -7,6 +7,7 @@ import com.example.plantwatering.domain.model.WateringHistory
 import com.example.plantwatering.domain.usecase.GetPlantsUseCase
 import com.example.plantwatering.domain.usecase.GetHistoriesUseCase
 import com.example.plantwatering.domain.usecase.WaterPlantUseCase
+import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -45,6 +46,7 @@ class WateringViewModel(
                 )
                 newSelected?.let { loadHistories(it) }
             } catch (e: Exception) {
+                Log.e("PlantLoad", "fail", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     error = e.message ?: "식물 불러오기 실패"
@@ -64,6 +66,7 @@ class WateringViewModel(
                     selectedPlantId = plantId
                 )
             } catch (e: Exception) {
+                Log.e("HistoryLoad", "fail", e)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     error = e.message ?: "히스토리 불러오기 실패"
@@ -87,6 +90,7 @@ class WateringViewModel(
                 // 히스토리도 최신화
                 loadHistories(plantId)
             } catch (e: Exception) {
+                Log.e("WaterPlant", "fail", e)
                 _uiState.value = _uiState.value.copy(
                     isWatering = false,
                     error = e.message ?: "물주기 실패"

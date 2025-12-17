@@ -10,12 +10,10 @@ class TipRepositoryImpl(
 ) : TipRepository {
 
     override suspend fun getTip(tipId: String): Tip? {
-        val list = tipDs.getTips()
-        return list.firstOrNull { it.tipId == tipId }?.toDomain()
-            ?: list.firstOrNull()?.toDomain()
+        val tip = tipDs.getTip(tipId)
+        if (tip != null) return tip.toDomain()
+        // fallback: 첫 번째 문서라도 반환
+        return null
     }
-
-    override suspend fun getTips(): List<Tip> =
-        tipDs.getTips().mapNotNull { it.toDomain() }
 }
 

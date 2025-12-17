@@ -37,6 +37,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.time.Duration
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.Instant
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -60,9 +63,27 @@ fun WateringScreen(
     // 기본은 물 주기 탭으로 설정
     Column {
         val uiPlants = state.plants.map { it.toUi() }
+        val zone = ZoneId.systemDefault()
+        val today = LocalDate.now(zone)
+
+        val dueUiPlants = uiPlants
+            .filter { plant ->
+                val nextDate = Instant.ofEpochMilli(plant.nextWateringAtEpoch)
+                    .atZone(zone).toLocalDate()
+                val lastDate = Instant.ofEpochMilli(plant.lastWateredAtEpoch)
+                    .atZone(zone).toLocalDate()
+
+                val isTodayOrPast = !nextDate.isAfter(today)
+                val wateredToday = lastDate.isEqual(today)
+
+                // 오늘/과거 예정이거나, 오늘 물을 준 경우(다음 급수일이 미래로 넘어가도 당일 유지)
+                isTodayOrPast || wateredToday
+            }
+            .sortedBy { it.nextWateringAtEpoch }
+
         InfoBox(
-            count = uiPlants.size,
-            plants = uiPlants
+            count = dueUiPlants.size,
+            plants = dueUiPlants
         )
         // 탭 버튼
         Box(){

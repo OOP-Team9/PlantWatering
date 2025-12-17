@@ -12,7 +12,7 @@ data class PlantDto(
     val wateringIntervalDays: Int = 1,        // 물 주기(일)
     val lastWateredAt: Timestamp = Timestamp.now(),   // 마지막 급수일
     val nextWateringAt: Timestamp = Timestamp.now(),  // 다음 급수 예정일
-    val photoUrl: String? = null,             // 사진 URL (nullable)
+    val imageUrl: String? = null,             // 사진 URL (nullable)
     val species: String? = null,              // 식물 종 (nullable)
     val dailyLog: String? = null,             // 일지 (nullable)
     val wateringStatus: Boolean = false,      // 오늘/예정 급수 필요 여부
