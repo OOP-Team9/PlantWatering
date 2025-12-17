@@ -31,7 +31,7 @@ class HomeViewModel(
 
             try {
                 val list = getPlantsUseCase()
-                val sorted = list.sortedBy { it.nextWateringAt }
+                val sorted = list.sortedBy { it.wateringIntervalDays }
 
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
