@@ -14,10 +14,8 @@ import java.util.Locale
 @Composable
 fun WaterHistory(histories: List<HistoryUi>){
     Column {
-        LazyColumn {
-            items(histories) { h ->
-                WaterHistoryCard(h)
-            }
+        for (h in histories) {
+            WaterHistoryCard(h)
         }
     }
 }

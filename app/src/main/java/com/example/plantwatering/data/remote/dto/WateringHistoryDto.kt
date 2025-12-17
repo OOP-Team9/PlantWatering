@@ -5,6 +5,5 @@ import com.google.firebase.Timestamp
 data class WateringHistoryDto(
     val historyId: String = "",
     val plantId: String = "",
-    val wateredAt: Timestamp = Timestamp.now(),
-    val uid: String = "" // collectionGroup 조회용
+    val wateredAt: Timestamp = Timestamp.now()
 )

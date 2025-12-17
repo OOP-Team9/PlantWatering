@@ -79,28 +79,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.plantwatering.presentation.viewmodel.WateringViewModel
 import com.example.plantwatering.presentation.viewmodel.WateringViewModelFactory
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(){
     val navController : NavHostController = rememberNavController()
 
     val wateringVm: WateringViewModel = viewModel(factory = WateringViewModelFactory())
-    val wateringState = wateringVm.uiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        wateringVm.loadPlants()
-    }
-
-    val dueCount by remember(wateringState.value.plants) {
-        derivedStateOf {
-            val nowMillis = System.currentTimeMillis()
-            wateringState.value.plants.count { plant ->
-                val next = plant.nextWateringAt.toEpochMilli()
-                // 오늘/지남 && 아직 안 준 경우만 카운트
-                next <= nowMillis && !plant.wateringStatus
-            }
-        }
-    }
 
     val items = listOf(
         NavigationItem(
@@ -119,7 +102,6 @@ fun AppNavigation(){
             title = "Water",
             selectedIcon = Icons.Filled.WaterDrop,
             unselectedIcon = Icons.Outlined.WaterDrop,
-            badgeCount = if (dueCount > 0) dueCount else null,
             route = Routes.WateringScreen.name
         ),
         NavigationItem(
@@ -184,22 +166,12 @@ fun AppNavigation(){
                                         },
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    BadgedBox(
-                                        badge = {
-                                            if (item.badgeCount != null) {
-                                                Badge {
-                                                    Text(text = item.badgeCount.toString())
-                                                }
-                                            }
-                                        }
-                                    ) {
-                                        Icon(
+                                    Icon(
                                             modifier = Modifier.size(26.dp),
                                             imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
                                             contentDescription = item.title,
                                             tint = if (isSelected) ButtonGreen else AlarmOffGray
                                         )
-                                    }
                                 }
                             }
                         }

@@ -8,6 +8,7 @@ import com.example.plantwatering.data.remote.datasource.WateringRemoteDataSource
 import com.example.plantwatering.domain.repository.WateringRepository
 import com.google.firebase.Timestamp
 import java.time.temporal.ChronoUnit
+import java.util.Calendar
 import java.util.Date
 
 class WateringRepositoryImpl(
@@ -16,23 +17,28 @@ class WateringRepositoryImpl(
     private val wateringDs: WateringRemoteDataSource
 ) : WateringRepository {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun waterPlant(plantId: String) {
         val uid = authDs.ensureSignedIn()
-
-        // 현재 plant 읽어서 interval 기반으로 next 계산
         val plant = plantDs.getPlant(uid, plantId)
-            ?: throw IllegalStateException("Plant not found: $plantId")
 
-        val interval = plant.wateringIntervalDays.coerceAtLeast(1)
-        val now = java.time.Instant.now()
-        val next = now.plus(interval.toLong(), ChronoUnit.DAYS)
+        val intervalDays: Int = plant?.wateringIntervalDays?.coerceAtLeast(1)?:1
+
+        // 현재 시각 = 물 주기 실행 시각
+        val nowDate = Date()
+
+        // 다음 급수 날짜 계산
+        val cal = Calendar.getInstance().apply {
+            time = Date()
+            add(Calendar.DAY_OF_YEAR, intervalDays)
+        }
+
+        val nextDate = cal.time
 
         wateringDs.waterPlant(
             uid = uid,
             plantId = plantId,
-            wateredAt = Timestamp(Date.from(now)),
-            nextWateringAt = Timestamp(Date.from(next))
+            wateredAt = Timestamp(nowDate),
+            nextWateringAt = Timestamp(nextDate)
         )
     }
 }

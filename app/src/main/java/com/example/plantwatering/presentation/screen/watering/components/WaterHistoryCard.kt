@@ -42,7 +42,6 @@ fun WaterHistoryCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            //.padding( start = 14.dp, bottom = 8.dp, end = 14.dp)
             .padding( horizontal = 14.dp, vertical = 5.dp)
     ) {
         Column(){

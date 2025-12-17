@@ -1,7 +1,5 @@
 package com.example.plantwatering.presentation.screen.watering
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.plantwatering.presentation.model.enums.WaterTab
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.data.remote.dto.toUi
+import com.example.plantwatering.presentation.screen.watering.components.HistoryUi
 import com.example.plantwatering.presentation.screen.watering.components.InfoBox
 import com.example.plantwatering.presentation.screen.watering.components.TabButton
 import com.example.plantwatering.presentation.screen.watering.components.WaterHistory
@@ -37,50 +35,36 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.time.Duration
-import java.time.LocalDate
-import java.time.ZoneId
 import java.time.Instant
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WateringScreen(
 ){
     val vm: WateringViewModel = viewModel(factory = WateringViewModelFactory())
+    // 상태 바뀌면 화면 자동 갱신
     val state by vm.uiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        vm.loadPlants()
-    }
 
     var selectedTab by remember { mutableStateOf(WaterTab.WATER) }
     val selectedId = state.selectedPlantId
 
-    LaunchedEffect(selectedTab, selectedId) {
-        if (selectedTab == WaterTab.HISTORY) {
-            selectedId?.let { vm.loadHistories(it) }
+    //UI 용 plantUi로 ..
+    val uiPlants = state.plants.map { it.toUi() }
+
+    val dateFmt = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
+    val today = dateFmt.format(Date())
+
+    val dueUiPlants = uiPlants
+        .filter { plant ->
+            val next = dateFmt.format(Date(plant.nextWateringAtEpoch))
+            val last = dateFmt.format(Date(plant.lastWateredAtEpoch))
+
+            // A 로직: next가 오늘 이하 OR last가 오늘
+            (next <= today) || (last == today)
         }
-    }
-    // 기본은 물 주기 탭으로 설정
+        .sortedBy { it.nextWateringAtEpoch }
+
+
     Column {
-        val uiPlants = state.plants.map { it.toUi() }
-        val zone = ZoneId.systemDefault()
-        val today = LocalDate.now(zone)
-
-        val dueUiPlants = uiPlants
-            .filter { plant ->
-                val nextDate = Instant.ofEpochMilli(plant.nextWateringAtEpoch)
-                    .atZone(zone).toLocalDate()
-                val lastDate = Instant.ofEpochMilli(plant.lastWateredAtEpoch)
-                    .atZone(zone).toLocalDate()
-
-                val isTodayOrPast = !nextDate.isAfter(today)
-                val wateredToday = lastDate.isEqual(today)
-
-                // 오늘/과거 예정이거나, 오늘 물을 준 경우(다음 급수일이 미래로 넘어가도 당일 유지)
-                isTodayOrPast || wateredToday
-            }
-            .sortedBy { it.nextWateringAtEpoch }
-
         InfoBox(
             count = dueUiPlants.size,
             plants = dueUiPlants
@@ -98,8 +82,10 @@ fun WateringScreen(
                 }
                 TabButton("히스토리", selectedTab == WaterTab.HISTORY) {
                     selectedTab = WaterTab.HISTORY
+                    selectedId?.let { vm.loadHistories(it) }
                 }
             }
+            //회색 줄
             Divider(
                 color = Color.LightGray,
                 thickness = 1.dp,
@@ -108,8 +94,6 @@ fun WateringScreen(
                     .fillMaxWidth()
             )
         }
-
-
         Spacer(modifier = Modifier.height(20.dp))
 
         // 탭에 따라 내용 전환
@@ -119,29 +103,31 @@ fun WateringScreen(
                 selectedId = selectedId,
                 onSelect = { id ->
                     vm.selectPlant(id)
-                    vm.loadHistories(id) // 카드 선택 시 해당 식물 히스토리 즉시 로드
+                    vm.loadHistories(id)
                 },
                 onWater = {
                     selectedId?.let { vm.waterPlant(it) }
                 }
             )
             WaterTab.HISTORY -> {
-                val nameMap = remember(state.plants) {
-                    state.plants.associateBy({ it.plantId }, { it.name })
+                // 히스토리와 함께 식물 이름을 띄우기 위함
+                val nameMap = mutableMapOf<String, String>()
+                for (p in state.plants) {
+                    nameMap[p.plantId] = p.name
                 }
+
                 val historyUi = state.histories.map { h ->
-                    val duration = Duration.between(h.wateredAt, java.time.Instant.now())
+                    val duration = Duration.between(h.wateredAt, Instant.now())
                     val text = when {
                         duration.toMinutes() < 1 -> "방금 전"
                         duration.toHours() < 1 -> "${duration.toMinutes()}분 전"
                         duration.toDays() < 1 -> "${duration.toHours()}시간 전"
                         duration.toDays() < 7 -> "${duration.toDays()}일 전"
                         else -> {
-                            val formatter = SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA)
-                            formatter.format(Date.from(h.wateredAt))
+                            dateFmt.format(Date.from(h.wateredAt))
                         }
                     }
-                    com.example.plantwatering.presentation.screen.watering.components.HistoryUi(
+                    HistoryUi(
                         plantName = nameMap[h.plantId] ?: "알 수 없음",
                         wateredAtText = text
                     )
@@ -152,7 +138,6 @@ fun WateringScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun WateringScreenPre() {

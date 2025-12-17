@@ -23,26 +23,25 @@ class WateringRemoteDataSourceImpl(
         wateredAt: Timestamp,
         nextWateringAt: Timestamp
     ) {
-        val pRef = plantDoc(uid, plantId)
-        val historyId = UUID.randomUUID().toString()
-        val hRef = historiesCol(uid, plantId).document(historyId)
+        val plant = plantDoc(uid, plantId)
 
-        val history = WateringHistoryDto(
-            historyId = historyId,
-            plantId = plantId,
-            wateredAt = wateredAt,
-            uid = uid
-        )
-
-        db.runBatch { batch ->
-            batch.update(pRef, mapOf(
+        plant.update(
+            mapOf(
                 "lastWateredAt" to wateredAt,
                 "nextWateringAt" to nextWateringAt,
-                // 물을 준 순간이므로 상태를 true(급수 완료)로 반영
                 "wateringStatus" to true,
-                "updatedAt" to com.google.firebase.Timestamp.now()
-            ))
-            batch.set(hRef, history)
-        }.await()
+                "updatedAt" to Timestamp.now()
+            )
+        ).await()
+        
+        val historyId = UUID.randomUUID().toString()
+        val history = historiesCol(uid, plantId).document(historyId)
+
+        val newHistory = WateringHistoryDto(
+            historyId = historyId,
+            plantId = plantId,
+            wateredAt = wateredAt
+        )
+        history.set(newHistory).await()
     }
 }

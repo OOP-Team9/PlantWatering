@@ -33,54 +33,48 @@ import com.example.plantwatering.presentation.model.ui.theme.White
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
 import com.example.plantwatering.presentation.model.ui.theme.testFamily
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import java.util.Date
+import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WaterPlantCard(
     plant: PlantUi,
     isSelected: Boolean = false,
     onClick: () -> Unit
 ) {
-    val status = remember(plant.wateringStatus, plant.nextWateringAtEpoch, plant.lastWateredAtEpoch) {
-        val nextDate = Instant.ofEpochMilli(plant.nextWateringAtEpoch)
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate()
-        val today = LocalDate.now()
-        val lastWateredDate = Instant.ofEpochMilli(plant.lastWateredAtEpoch)
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate()
+    val fmt = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
+    val todayStr = fmt.format(Date())
 
-        val isNextToday = nextDate.isEqual(today)
-        val lastWateredToday = lastWateredDate.isEqual(today)
+    val nextStr = fmt.format(Date(plant.nextWateringAtEpoch))
+    val lastStr = fmt.format(Date(plant.lastWateredAtEpoch))
 
-        // 규칙:
-        // 1) 급수날이 오늘이 아니면 기본 회색.
-        //    단, 오늘 물을 준 상태(wateringStatus=true && lastWateredToday=true)이면 파란 유지.
-        // 2) 급수날이 오늘이면 status로 판단: false=경고, true=파랑.
-        when {
-            !isNextToday && lastWateredToday && plant.wateringStatus -> 1 // 오늘 급수했으므로 파랑 유지
-            !isNextToday -> 2 // 급수날이 아님: 회색
-            isNextToday && !plant.wateringStatus -> 0 // 오늘이고 미급수: 경고
-            isNextToday && plant.wateringStatus -> 1 // 오늘이고 급수 완료: 파랑
-            else -> 2
-        }
+    val status = when {
+        (nextStr != todayStr)
+                && (lastStr == todayStr)
+                && plant.wateringStatus -> 1 // 파랑
+        (nextStr != todayStr) -> 2 // 회색
+        (nextStr == todayStr) && !plant.wateringStatus -> 0 // 경고
+        (nextStr == todayStr) && plant.wateringStatus -> 1 // 파랑
+        else -> 2 // 회색
     }
 
-    val dDayText = remember(plant.nextWateringAtEpoch) {
-        val nextDate = Instant.ofEpochMilli(plant.nextWateringAtEpoch)
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate()
-        val today = LocalDate.now()
-        val days = ChronoUnit.DAYS.between(today, nextDate).toInt()
-        when {
-            days == 0 -> "D-DAY"
-            days > 0 -> "D-$days"
-            else -> "D+${kotlin.math.abs(days)}"
-        }
+    // D-Day 계산
+    val nextDate = Instant.ofEpochMilli(plant.nextWateringAtEpoch)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate()
+    val todayDate = LocalDate.now()
+
+    val days = ChronoUnit.DAYS.between(todayDate, nextDate).toInt()
+
+    val dDayText = when {
+        days == 0 -> "D-DAY"
+        days > 0 -> "D-$days"
+        else -> ""
     }
 
     Box(
@@ -143,8 +137,7 @@ fun WaterPlantCard(
                     fontSize = 15.sp,
                     color = StrokeGray
                 )
-                // 다음 급수 계산
-                // (마지막 급수일 + 주기) - (오늘 날짜)
+
                 Text(
                     text = "다음 급수 $dDayText",
                     fontSize = 15.sp,
@@ -156,7 +149,6 @@ fun WaterPlantCard(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun WaterPlantCardPre() {

@@ -31,20 +31,22 @@ class WateringViewModel(
     private val _uiState = MutableStateFlow(WateringUiState())
     val uiState: StateFlow<WateringUiState> = _uiState.asStateFlow()
 
+    init {
+        loadPlants()
+    }
+
     fun loadPlants() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             try {
-                val list = getPlantsUseCase()
-                val sorted = list.sortedBy { it.nextWateringAt }
-                val currentSelected = _uiState.value.selectedPlantId
-                val newSelected = currentSelected ?: sorted.firstOrNull()?.plantId
+                val plantList = getPlantsUseCase().sortedBy { it.nextWateringAt }
+                val selectedPlantId = _uiState.value.selectedPlantId ?: plantList.firstOrNull()?.plantId
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    plants = sorted,
-                    selectedPlantId = newSelected
+                    plants = plantList,
+                    selectedPlantId =selectedPlantId
                 )
-                newSelected?.let { loadHistories(it) }
+                //selectedPlantId?.let { loadHistories(it) } //null이 아니면 loadHistories 실행
             } catch (e: Exception) {
                 Log.e("PlantLoad", "fail", e)
                 _uiState.value = _uiState.value.copy(
@@ -80,14 +82,17 @@ class WateringViewModel(
             _uiState.value = _uiState.value.copy(isWatering = true, error = null)
             try {
                 waterPlantUseCase(plantId)
-                // 물 주기 성공 후 목록 갱신
+
+                // 식물 갱신
+                // 바뀐 식물 목록들 다시 가지고 오기
                 val list = getPlantsUseCase()
                 _uiState.value = _uiState.value.copy(
                     isWatering = false,
                     plants = list,
                     selectedPlantId = plantId
                 )
-                // 히스토리도 최신화
+
+                // 히스토리 갱신
                 loadHistories(plantId)
             } catch (e: Exception) {
                 Log.e("WaterPlant", "fail", e)
