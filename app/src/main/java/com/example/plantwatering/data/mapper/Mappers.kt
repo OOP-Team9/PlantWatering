@@ -22,7 +22,7 @@ fun PlantDto.toUi(): PlantUi {
         nextWateringAtEpoch = next.time,
         lastWateredAtEpoch = lastWateredAt.toDate().time,
         wateringStatus = wateringStatus,
-        photoUrl = photoUrl
+        imageUrl = imageUrl
     )
 }
 fun Plant.toUi(): PlantUi {
@@ -36,7 +36,7 @@ fun Plant.toUi(): PlantUi {
         nextWateringAtEpoch = next.time,
         lastWateredAtEpoch = Date.from(lastWateredAt).time,
         wateringStatus = wateringStatus,
-        photoUrl = photoUrl
+        imageUrl = imageUrl
     )
 }
 fun PlantDto.toDomain(): Plant = Plant(
@@ -45,7 +45,7 @@ fun PlantDto.toDomain(): Plant = Plant(
     wateringIntervalDays = wateringIntervalDays,
     lastWateredAt = lastWateredAt.toDate().toInstant(),
     nextWateringAt = nextWateringAt.toDate().toInstant(),
-    photoUrl = photoUrl,
+    imageUrl = imageUrl,
     species = species,
     dailyLog = dailyLog,
     wateringStatus = wateringStatus
@@ -57,7 +57,7 @@ fun Plant.toDto(): PlantDto = PlantDto(
     wateringIntervalDays = wateringIntervalDays,
     lastWateredAt = Timestamp(Date.from(lastWateredAt)),
     nextWateringAt = Timestamp(Date.from(nextWateringAt)),
-    photoUrl = photoUrl,
+    imageUrl = imageUrl,
     species = species,
     dailyLog = dailyLog,
     wateringStatus = wateringStatus

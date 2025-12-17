@@ -4,7 +4,7 @@ package com.example.plantwatering.presentation.screen.watering.components
 data class PlantUi(
     val plantId: String = "",
     val name: String,
-    val photoUrl: String? = null,
+    val imageUrl: String? = null,
     val wateringIntervalDays: Int,
     val nextWateringDate: String, // UI 표기용 날짜 문자열
     val nextWateringAtEpoch: Long, // 정렬/상태 계산용

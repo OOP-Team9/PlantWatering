@@ -23,8 +23,8 @@ class RegisterViewModel : ViewModel() {
     val species: StateFlow<String> = _species
 
     // 사진 URL
-    private val _photoUrl = MutableStateFlow("")
-    val photoUrl: StateFlow<String> = _photoUrl
+    private val _imageUrl = MutableStateFlow("")
+    val imageUrl: StateFlow<String> = _imageUrl
 
     fun updateName(new: String) {
         _plantName.value = new
@@ -42,8 +42,8 @@ class RegisterViewModel : ViewModel() {
         _species.value = new
     }
 
-    fun updatePhotoUrl(new: String) {
-        _photoUrl.value = new
+    fun updateImageUrl(new: String) {
+        _imageUrl.value = new
     }
 }
 

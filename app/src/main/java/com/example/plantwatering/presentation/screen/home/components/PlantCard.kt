@@ -125,7 +125,7 @@ fun PlantCardPreview() {
                 wateringIntervalDays = 5,
                 lastWateredAt = Instant.now(),
                 nextWateringAt = Instant.now(),
-                photoUrl = null,
+                imageUrl = null,
                 species = "Monstera deliciosa",
                 wateringStatus = false
             ),
