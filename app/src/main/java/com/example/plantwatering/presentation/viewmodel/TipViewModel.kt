@@ -21,6 +21,9 @@ class TipViewModel(
     private val _uiState = MutableStateFlow(TipUiState())
     val uiState: StateFlow<TipUiState> = _uiState.asStateFlow()
 
+    init {
+        loadTip()
+    }
     fun loadTip(tipId: String = "default") {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)

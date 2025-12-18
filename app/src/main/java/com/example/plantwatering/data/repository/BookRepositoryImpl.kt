@@ -14,9 +14,7 @@ class BookRepositoryImpl(
     }
 
     override suspend fun getBookByPlantName(plantName: String): Book? {
-        return bookDs.getBooks()
-            .firstOrNull { it.plantName == plantName }
-            ?.toDomain()
+        return bookDs.getBooks().firstOrNull { it.plantName == plantName }?.toDomain()
     }
 }
 

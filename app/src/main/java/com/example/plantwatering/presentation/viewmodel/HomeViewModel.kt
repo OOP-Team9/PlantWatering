@@ -22,6 +22,9 @@ class HomeViewModel(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
+    init {
+        loadPlants()
+    }
     fun loadPlants() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(

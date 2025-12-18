@@ -54,21 +54,21 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 
 @Composable
-fun SpeechBubbleWithImage(text: String, modifier: Modifier) {
+fun SpeechBubble(text: String, modifier: Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .width(220.dp)
             .height(120.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.speech_bubble),
             contentDescription = "말풍선",
-            modifier = Modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize()
         )
         Text(
             text = text,
             fontSize = 14.sp,
-            modifier = Modifier
+            modifier = modifier
                 .align(Alignment.Center)
                 .padding(horizontal = 16.dp)
         )
@@ -141,7 +141,7 @@ fun TipScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                SpeechBubbleWithImage(
+                SpeechBubble(
                     text = "내가 평소에 먹는 식물들!\n많이 알려줄게!\n그렇다고 먹진 말궁~",
                     modifier = Modifier
                         .align(Alignment.Top)
