@@ -43,9 +43,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun PlusIcon(onClick: () -> Unit) { //입력 안 받고 반환값 없고
+fun PlusIcon(onClick: () -> Unit) {
     LargeFloatingActionButton(
-        onClick = { onClick() }, //람다함수
+        onClick = { onClick() },
         shape = CircleShape,
         containerColor = PlusIcon,
         contentColor = Color.White,
@@ -66,24 +66,24 @@ fun HomeRoute() {
 
     NavHost(
         navController = navController,
-        startDestination = HomeTab.HOME.route
+        startDestination = HomeTab.HOME.name
     ) {
-        composable(HomeTab.HOME.route) { //route가 HOME일 때 보여줄 화면
+        composable(HomeTab.HOME.name) { //route가 HOME일 때 보여줄 화면
             HomeScreen(
                 onPlusClick = {
-                    navController.navigate(HomeTab.REGISTER.route)
+                    navController.navigate(HomeTab.REGISTER.name)
                 },
                 onWriteClick = {plantId ->
-                    navController.navigate("${HomeTab.DETAIL.route}/$plantId")
+                    navController.navigate("${HomeTab.DETAIL.name}/$plantId")
                 }
             )
         }
 
-        composable(HomeTab.REGISTER.route) {
+        composable(HomeTab.REGISTER.name) {
             RegisterScreen()
         }
 
-        composable("${HomeTab.DETAIL.route}/{plantId}") {
+        composable("${HomeTab.DETAIL.name}/{plantId}") {
             DetailScreen()
         }
     }
@@ -98,10 +98,6 @@ fun HomeScreen(
     val tipState by tipViewModel.uiState.collectAsState()
     val plantState by homeViewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        tipViewModel.loadTip()
-        homeViewModel.loadPlants()
-    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -116,7 +112,6 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             PlantTipBox(
-                title = "오늘의 식물 팁",
                 content = when {
                     tipState.isLoading -> "불러오는 중..."
                     tipState.error != null -> tipState.error ?: "팁을 불러오지 못했어요"
@@ -126,20 +121,11 @@ fun HomeScreen(
             )
 
             when {
-                plantState.isLoading -> {
-                    Text("식물 불러오는 중...")
-                }
-
-                plantState.error != null -> {
-                    Text(plantState.error ?: "에러 발생")
-                }
-
+                plantState.isLoading -> Text("식물 불러오는 중...")
+                plantState.error != null -> Text(plantState.error ?: "에러 발생")
                 else -> {
                     plantState.plants.forEach { plant ->
-                        val lastWateringText = plant.lastWateredAt
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate()
-                            .format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
+                        val lastWateringText = plant.lastWateredAt.toString().take(10)
                         PlantCard(
                             plant = plant,
                             lastWatering = lastWateringText,
@@ -156,7 +142,7 @@ fun HomeScreen(
                 .align(Alignment.BottomEnd)
                 .padding(20.dp)
         ) {
-            PlusIcon (onClick = onPlusClick) //
+            PlusIcon (onClick = onPlusClick)
         }
     }
 }

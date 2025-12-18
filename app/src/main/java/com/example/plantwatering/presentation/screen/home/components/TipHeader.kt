@@ -28,7 +28,6 @@ import com.example.plantwatering.presentation.model.ui.theme.testFamily
 
 @Composable
 fun PlantTipBox(
-    title: String,
     content: String
 ){
     Box(
@@ -43,7 +42,7 @@ fun PlantTipBox(
     ){
         Column(modifier = Modifier.wrapContentHeight()) {
             Text(
-                text = "\uD83D\uDCA1 $title",
+                text = "\uD83D\uDCA1 오늘의 식물 팁",
                 color = Color.Black,
                 fontFamily = testFamily,
                 fontSize = 20.sp,
@@ -69,7 +68,6 @@ fun PlantTipBox(
 fun PlantTipBoxPreview(){
     PlantWateringTheme {
         PlantTipBox(
-            "오늘의 식물 팁",
             "화분 바닥에 배수 구멍이 있어야 뿌리가 썩지 않아요."
         )
     }
