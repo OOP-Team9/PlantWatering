@@ -4,7 +4,7 @@ data class Book(
     val bookId: String,
     val plantName: String,
     val plantEngName: String,
-    val photoUri: String,
+    val imageUrl: String,
     val lightInfo: String,
     val waterInfo: String,
     val humidityInfo: String,

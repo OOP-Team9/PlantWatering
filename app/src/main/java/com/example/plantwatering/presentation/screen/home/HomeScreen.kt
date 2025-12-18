@@ -32,7 +32,7 @@ import com.example.plantwatering.presentation.screen.home.components.PlantCard
 import com.example.plantwatering.presentation.screen.home.components.PlantTipBox
 import com.example.plantwatering.presentation.screen.register.RegisterScreen
 import com.example.plantwatering.presentation.model.enums.HomeTab
-import com.example.plantwatering.presentation.model.ui.theme.Plusicon
+import com.example.plantwatering.presentation.model.ui.theme.PlusIcon
 import com.example.plantwatering.presentation.screen.register.DetailScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.plantwatering.presentation.viewmodel.HomeViewModel
@@ -47,7 +47,7 @@ fun PlusIcon(onClick: () -> Unit) {
     LargeFloatingActionButton(
         onClick = { onClick() },
         shape = CircleShape,
-        containerColor = Plusicon,
+        containerColor = PlusIcon,
         contentColor = Color.White,
         elevation = FloatingActionButtonDefaults.elevation(0.dp), //그림자 없음(FAB 기본값 없애기)
         modifier = Modifier.size(70.dp)

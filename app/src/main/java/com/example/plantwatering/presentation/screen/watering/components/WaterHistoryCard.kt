@@ -26,6 +26,7 @@ import com.example.plantwatering.R
 import com.example.plantwatering.presentation.model.ui.theme.AlarmOffGray
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 
@@ -42,17 +43,15 @@ fun WaterHistoryCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            //.padding( start = 14.dp, bottom = 8.dp, end = 14.dp)
             .padding( horizontal = 14.dp, vertical = 5.dp)
     ) {
-        Column(){
             Row(
                 modifier = Modifier
                     .padding(10.dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.history_water),
-                    contentDescription = null,
+                    contentDescription = "물방울",
                     modifier = Modifier
                         .size(44.dp)
                 )
@@ -80,14 +79,13 @@ fun WaterHistoryCard(
             )
         }
     }
-}
+
 
 
 @Preview(showBackground = true)
 @Composable
 fun WaterHistoryPre() {
-    val sdf = SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA)
-    val sample = HistoryUi("몬스테라", sdf.format(Date()))
+    val sample = HistoryUi("몬스테라", "2025")
     PlantWateringTheme {
         WaterHistoryCard(sample)
     }

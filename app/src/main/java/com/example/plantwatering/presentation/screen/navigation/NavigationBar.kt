@@ -1,9 +1,5 @@
 package com.example.plantwatering.presentation.screen.navigation
 
-import android.graphics.BlurMaskFilter
-import android.graphics.RegionIterator
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,34 +11,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.drawOutline
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-//Navagation
+//Navigation
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -64,69 +45,46 @@ import androidx.compose.material.icons.outlined.Alarm
 import androidx.compose.material.icons.outlined.Grass
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.WaterDrop
-import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.plantwatering.presentation.model.NavigationItem
-import com.example.plantwatering.presentation.model.enums.Routes
 
 //Colors
 import com.example.plantwatering.presentation.model.ui.theme.AlarmOffGray
 import com.example.plantwatering.presentation.model.ui.theme.BoxGreen
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.model.ui.theme.White
 import com.example.plantwatering.presentation.model.ui.theme.dropShadow
-import com.example.plantwatering.presentation.screen.register.RegisterScreen
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.plantwatering.presentation.viewmodel.WateringViewModel
-import com.example.plantwatering.presentation.viewmodel.WateringViewModelFactory
 
-@RequiresApi(Build.VERSION_CODES.O)
+import com.example.plantwatering.presentation.model.enums.Routes.*
 @Composable
 fun AppNavigation(){
     val navController : NavHostController = rememberNavController()
-
-    val wateringVm: WateringViewModel = viewModel(factory = WateringViewModelFactory())
-    val wateringState = wateringVm.uiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        wateringVm.loadPlants()
-    }
-
-    val dueCount by remember(wateringState.value.plants) {
-        derivedStateOf {
-            val nowMillis = System.currentTimeMillis()
-            wateringState.value.plants.count { plant ->
-                val next = plant.nextWateringAt.toEpochMilli()
-                // 오늘/지남 && 아직 안 준 경우만 카운트
-                next <= nowMillis && !plant.wateringStatus
-            }
-        }
-    }
 
     val items = listOf(
         NavigationItem(
             title = "Home",
             selectedIcon = Icons.Filled.Grass,
             unselectedIcon = Icons.Outlined.Grass,
-            route = Routes.HomeScreen.name
+            route = HomeScreen.name
         ),
         NavigationItem(
             title = "Tip",
             selectedIcon = Icons.Filled.List,
             unselectedIcon = Icons.Outlined.List,
-            route = Routes.TipScreen.name
+            route = TipScreen.name
         ),
         NavigationItem(
             title = "Water",
             selectedIcon = Icons.Filled.WaterDrop,
             unselectedIcon = Icons.Outlined.WaterDrop,
-            badgeCount = if (dueCount > 0) dueCount else null,
-            route = Routes.WateringScreen.name
+            route = WateringScreen.name
         ),
         NavigationItem(
             title = "Alarm",
             selectedIcon = Icons.Filled.Alarm,
             unselectedIcon = Icons.Outlined.Alarm,
-            route = Routes.AlarmScreen.name
+            route = AlarmScreen.name
         )
     )
 
@@ -161,7 +119,7 @@ fun AppNavigation(){
                         ) {
                             items.forEachIndexed { index, item ->
 
-                                val isSelected = selectedItemIndex == index
+                                val isSelected = (selectedItemIndex == index)
 
                                 Box(
                                     modifier = Modifier
@@ -176,30 +134,16 @@ fun AppNavigation(){
                                             navController.navigate(item.route) {
                                                 // 네비게이션 스택 특정 목적지까지 pop 후 이동
                                                 popUpTo(navController.graph.startDestinationId) { inclusive = true }
-                                                // 같은 화면 다시 navigate할 때 새로 x, 재사용
-                                                launchSingleTop = true
-                                                // 이전에 해당 route가 pop 됏었다면 저장된 상태 복원
-                                                restoreState = true
                                             }
                                         },
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    BadgedBox(
-                                        badge = {
-                                            if (item.badgeCount != null) {
-                                                Badge {
-                                                    Text(text = item.badgeCount.toString())
-                                                }
-                                            }
-                                        }
-                                    ) {
-                                        Icon(
+                                    Icon(
                                             modifier = Modifier.size(26.dp),
                                             imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
                                             contentDescription = item.title,
                                             tint = if (isSelected) ButtonGreen else AlarmOffGray
                                         )
-                                    }
                                 }
                             }
                         }
@@ -212,21 +156,29 @@ fun AppNavigation(){
         paddingValues ->
             NavHost(
                 navController = navController,
-                startDestination = Routes.HomeScreen.name,
+                startDestination = HomeScreen.name,
                 modifier = Modifier.padding(paddingValues)
             ){
-                composable(route = Routes.HomeScreen.name){
+                composable(route = HomeScreen.name){
                     HomeRoute()
                 }
-                composable(route = Routes.TipScreen.name){
+                composable(route = TipScreen.name){
                     TipScreen()
                 }
-                composable(route = Routes.WateringScreen.name){
+                composable(route = WateringScreen.name){
                     WateringScreen()
                 }
-                composable(route = Routes.AlarmScreen.name){
+                composable(route = AlarmScreen.name){
                     AlarmScreen()
                 }
             }
         }
     }
+
+@Preview(showBackground = true)
+@Composable
+fun NavigationBarPre() {
+    PlantWateringTheme {
+        AppNavigation()
+    }
+}

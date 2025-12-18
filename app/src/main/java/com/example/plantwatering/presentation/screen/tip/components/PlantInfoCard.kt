@@ -107,7 +107,7 @@ fun PlantInfoCardPreview() {
                 bookId = "1",
                 plantName = "몬스테라",
                 plantEngName = "Monstera deliciosa",
-                photoUri = "",
+                imageUrl = "",
                 lightInfo = "간접광",
                 waterInfo = "주 1-2회",
                 humidityInfo = "중간-높음",

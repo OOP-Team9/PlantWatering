@@ -6,6 +6,6 @@ import com.example.plantwatering.domain.repository.BookRepository
 class GetBookUseCase(
     private val repo: BookRepository
 ) {
-    suspend operator fun invoke(plantname: String): Book? = repo.getBookByPlantName(plantname)
+    suspend operator fun invoke(plantName: String): Book? = repo.getBookByPlantName(plantName)
 }
 

@@ -25,7 +25,6 @@ fun TabButton(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    val underlineColor = if (selected) ButtonGreen else Color.Transparent
 
     Text(
         text = text,
@@ -33,14 +32,11 @@ fun TabButton(
             .padding(9.5.dp)
             .clickable { onClick() }
             .drawBehind{
-                val stroke = 2.dp.toPx()
-                val space = 45.dp.toPx()
-                val bottomSpace =10.dp.toPx()
                 drawLine(
-                    color = underlineColor,
-                    start = Offset(-space, size.height + bottomSpace),
-                    end = Offset(size.width + space, size.height + bottomSpace),
-                    strokeWidth = stroke
+                    color = if (selected) ButtonGreen else Color.Transparent,
+                    start = Offset(-45.dp.toPx(), size.height + 10.dp.toPx()),
+                    end = Offset(size.width + 45.dp.toPx(), size.height + 10.dp.toPx()),
+                    strokeWidth = 2.dp.toPx()
                 )
             },
         color = if (selected) ButtonGreen else AlarmOffGray,

@@ -1,7 +1,5 @@
 package com.example.plantwatering.presentation.screen.watering.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -11,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material3.Text
@@ -26,10 +22,6 @@ import androidx.compose.ui.unit.sp
 import com.example.plantwatering.presentation.model.ui.theme.ButtonGreen
 import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 
-import androidx.compose.ui.platform.LocalContext
-import com.example.plantwatering.presentation.screen.watering.components.PlantUi
-
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun WaterList(
     plants: List<PlantUi>,
@@ -37,16 +29,18 @@ fun WaterList(
     onSelect: (String) -> Unit,
     onWater: () -> Unit
 ){
-    Column(){
-        LazyColumn(
+     Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(max = 375.dp)
         ) {
-            items(plants){ plant ->
+            for (plant in plants) {
                 WaterPlantCard(
                     plant = plant,
-                    isSelected = plant.plantId == selectedId,
+                    isSelected = (plant.plantId == selectedId),
                     onClick = { onSelect(plant.plantId) }
                 )
             }
@@ -55,11 +49,11 @@ fun WaterList(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp, start = 14.dp, end = 14.dp)
         ) {
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterEnd)
+                    .padding(top = 8.dp, end = 14.dp)
                     .background(
                         color = ButtonGreen,
                         shape = RoundedCornerShape(25.dp)
@@ -76,12 +70,10 @@ fun WaterList(
                 )
             }
         }
-
     }
-
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+
 @Preview(showBackground = true)
 @Composable
 fun WaterListPre() {

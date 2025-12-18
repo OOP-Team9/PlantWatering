@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.plantwatering.presentation.model.ui.theme.PlantWateringTheme
 import com.example.plantwatering.presentation.screen.watering.components.HistoryUi
 import com.example.plantwatering.presentation.screen.watering.components.plants
 import java.text.SimpleDateFormat
@@ -14,10 +15,8 @@ import java.util.Locale
 @Composable
 fun WaterHistory(histories: List<HistoryUi>){
     Column {
-        LazyColumn {
-            items(histories) { h ->
-                WaterHistoryCard(h)
-            }
+        for (h in histories) {
+            WaterHistoryCard(h)
         }
     }
 }
@@ -25,10 +24,11 @@ fun WaterHistory(histories: List<HistoryUi>){
 @Preview(showBackground = true)
 @Composable
 fun WaterHisPre(){
-    val sdf = SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.KOREA)
-    val sample = listOf(
-        HistoryUi("몬스테라", sdf.format(Date())),
-        HistoryUi("로즈마리", sdf.format(Date()))
+    val samples = listOf(
+        HistoryUi("몬스테라", "2025"),
+        HistoryUi("로즈마리", "2025")
     )
-    WaterHistory(sample)
+    PlantWateringTheme {
+        WaterHistory(samples)
+    }
 }

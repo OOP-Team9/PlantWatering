@@ -7,5 +7,4 @@ interface PlantRepository {
     suspend fun getPlants(): List<Plant>
     suspend fun getPlant(plantId: String): Plant?
     suspend fun updatePlant(plantId: String, fields: Map<String, Any?>)
-    suspend fun deletePlant(plantId: String)
 }
