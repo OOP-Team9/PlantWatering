@@ -44,8 +44,4 @@ class PlantRemoteDataSourceImpl(
             .update(fields + ("updatedAt" to com.google.firebase.Timestamp.now()))
             .await()
     }
-
-    override suspend fun deletePlant(uid: String, plantId: String) {
-        plantsCol(uid).document(plantId).delete().await()
-    }
 }

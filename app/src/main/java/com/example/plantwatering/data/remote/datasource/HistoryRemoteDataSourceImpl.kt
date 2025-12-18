@@ -16,7 +16,8 @@ class HistoryRemoteDataSourceImpl(
     override suspend fun getHistories(uid: String, plantId: String): List<WateringHistoryDto> {
         val snap = historiesCol(uid, plantId)
             .orderBy("wateredAt", com.google.firebase.firestore.Query.Direction.DESCENDING)
-            .limit(10)
+            // wateredAt 기준 내림차순으로
+            .limit(10) // 내림차순 후, 즉 최근 10개까지만만
             .get()
             .await()
 

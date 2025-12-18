@@ -2,10 +2,6 @@ package com.example.plantwatering.data.remote.dto
 
 import com.google.firebase.Timestamp
 
-/**
- * Firestore 기준 식물 문서 모델.
- * - collection: /users/{uid}/plants/{plantId}
- */
 data class PlantDto(
     val plantId: String = "",                 // 문서 ID (string)
     val name: String = "",                    // 식물 이름

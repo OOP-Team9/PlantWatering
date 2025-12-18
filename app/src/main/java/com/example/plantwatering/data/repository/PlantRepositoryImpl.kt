@@ -12,28 +12,21 @@ class PlantRepositoryImpl(
     private val plantDs: PlantRemoteDataSource
 ) : PlantRepository {
 
+    private suspend fun uid(): String = authDs.ensureSignedIn()
+
     override suspend fun createPlant(plant: Plant) {
-        val uid = authDs.ensureSignedIn()
-        plantDs.createPlant(uid, plant.toDto())
+        plantDs.createPlant(uid(), plant.toDto())
     }
 
     override suspend fun getPlants(): List<Plant> {
-        val uid = authDs.ensureSignedIn()
-        return plantDs.getPlants(uid).map { it.toDomain() }
+        return plantDs.getPlants(uid()).map { it.toDomain() }
     }
 
     override suspend fun getPlant(plantId: String): Plant? {
-        val uid = authDs.ensureSignedIn()
-        return plantDs.getPlant(uid, plantId)?.toDomain()
+        return plantDs.getPlant(uid(), plantId)?.toDomain()
     }
 
     override suspend fun updatePlant(plantId: String, fields: Map<String, Any?>) {
-        val uid = authDs.ensureSignedIn()
-        plantDs.updatePlant(uid, plantId, fields)
-    }
-
-    override suspend fun deletePlant(plantId: String) {
-        val uid = authDs.ensureSignedIn()
-        plantDs.deletePlant(uid, plantId)
+        plantDs.updatePlant(uid(), plantId, fields)
     }
 }

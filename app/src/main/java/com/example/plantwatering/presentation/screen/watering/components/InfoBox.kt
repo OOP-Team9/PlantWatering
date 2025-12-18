@@ -19,14 +19,12 @@ import kotlin.String
 import com.example.plantwatering.presentation.screen.watering.components.*
 
 
-// 깡통 용
-// 물 줘야 할 식물 수와 식물을 쿼리 조회할 때  필터링해서 얘한테 전달해주는..!
-
 @Composable
 fun InfoBox(
-   count: Int,
    plants: List<PlantUi>
 ){
+    val count :Int = plants.size
+
     Box(
         modifier = Modifier
             .wrapContentHeight()
@@ -67,7 +65,6 @@ fun InfoBox(
 fun InfoBoxPre() {
     PlantWateringTheme {
         InfoBox(
-            3,
             plants
         )
     }
