@@ -43,9 +43,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun PlusIcon(onClick: () -> Unit) { //입력 안 받고 반환값 없고
+fun PlusIcon(onClick: () -> Unit) {
     LargeFloatingActionButton(
-        onClick = { onClick() }, //람다함수
+        onClick = { onClick() },
         shape = CircleShape,
         containerColor = Plusicon,
         contentColor = Color.White,
@@ -116,7 +116,6 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             PlantTipBox(
-                title = "오늘의 식물 팁",
                 content = when {
                     tipState.isLoading -> "불러오는 중..."
                     tipState.error != null -> tipState.error ?: "팁을 불러오지 못했어요"
@@ -126,14 +125,8 @@ fun HomeScreen(
             )
 
             when {
-                plantState.isLoading -> {
-                    Text("식물 불러오는 중...")
-                }
-
-                plantState.error != null -> {
-                    Text(plantState.error ?: "에러 발생")
-                }
-
+                plantState.isLoading -> Text("식물 불러오는 중...")
+                plantState.error != null -> Text(plantState.error ?: "에러 발생")
                 else -> {
                     plantState.plants.forEach { plant ->
                         val lastWateringText = plant.lastWateredAt
